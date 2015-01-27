@@ -31,4 +31,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonOpenimage();
+	void DrawPicToHDC(IplImage * img, UINT ID);
 };

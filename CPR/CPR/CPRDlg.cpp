@@ -156,14 +156,35 @@ HCURSOR CCPRDlg::OnQueryDragIcon()
 
 void CCPRDlg::OnBnClickedButtonOpenimage()
 {
-	IplImage *image=NULL; //原始图像
-	if(image) cvReleaseImage(&image);
-	image = cvLoadImage("D:\\demo.png",1); //显示图片
-	CDC *pDC = GetDlgItem(IDC_ORIGINALIMAGE)->GetDC();
-	IplImage *img = image;
+	// 设置过滤器   
+    TCHAR szFilter[] = _T("Image File(*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp|All File(*.*)|*.*||");   
+    // 构造打开文件对话框   
+    CFileDialog fileDlg(TRUE, NULL, NULL, 0, szFilter, this);   
+    CString strFilePath;   
+  
+    // 显示打开文件对话框   
+    if (IDOK == fileDlg.DoModal())   
+    {   
+        // 如果点击了文件对话框上的“打开”按钮，则将选择的文件路径显示到编辑框里   
+        strFilePath = fileDlg.GetPathName();  
+		//MessageBox(strFilePath);
+
+		IplImage *image = NULL; //原始图像
+		if(image) cvReleaseImage(&image);
+		image = cvLoadImage(strFilePath, 1); //显示图片
+		DrawPicToHDC(image, IDC_ORIGINALIMAGE);
+    }   
+
+
+}
+
+
+void CCPRDlg::DrawPicToHDC(IplImage * img, UINT ID)
+{
+	CDC *pDC = GetDlgItem(ID)->GetDC();
 	HDC hDC= pDC->GetSafeHdc();
 	CRect rect;
-	GetDlgItem(IDC_ORIGINALIMAGE)->GetClientRect(&rect);
+	GetDlgItem(ID)->GetClientRect(&rect);
 	CvvImage cimg;
 	cimg.CopyOf( img ); // 复制图片
 	cimg.DrawToHDC( hDC, &rect ); // 将图片绘制到显示控件的指定区域内
