@@ -16,87 +16,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
-    <None Include="res\file_view.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\file_view_hc.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\class_view.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\class_view_hc.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\fileview.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\fileview_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\classview.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\classview_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\explorer.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\explorer_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\sort.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\sort_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\menuimages.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\menuimages_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\output_wnd.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\output_wnd_hc.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\properties_wnd.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\properties_wnd_hc.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\properties.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\properties_hc.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="UserImages.bmp">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="res\CPR.rc2">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\CPRDoc.ico">
       <Filter>资源文件</Filter>
     </None>
     <None Include="res\CPR.ico">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="res\Toolbar.bmp">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\Toolbar256.bmp">
-      <Filter>资源文件</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPR.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPRDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -105,34 +36,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MainFrm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ChildFrm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CPRDoc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CPRView.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FileView.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ClassView.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ViewTree.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="OutputWnd.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PropertiesWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,34 +44,10 @@
     <ClCompile Include="CPR.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CPRDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ChildFrm.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CPRDoc.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CPRView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FileView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ClassView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ViewTree.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="OutputWnd.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PropertiesWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
