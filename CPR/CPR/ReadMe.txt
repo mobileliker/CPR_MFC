@@ -1,74 +1,100 @@
 ================================================================================
-MICROSOFT 基础类库: CPR 项目概述
+    MICROSOFT FOUNDATION CLASS LIBRARY : CPR Project Overview
 ===============================================================================
 
-应用程序向导已为您创建了这个 CPR 应用程序。此应用程序不仅演示 Microsoft 基础类的基本使用方法，还可作为您编写应用程序的起点。
+The application wizard has created this CPR application for
+you.  This application not only demonstrates the basics of using the Microsoft
+Foundation Classes but is also a starting point for writing your application.
 
-本文件概要介绍组成 CPR 应用程序的每个文件的内容。
+This file contains a summary of what you will find in each of the files that
+make up your CPR application.
 
 CPR.vcxproj
-这是使用应用程序向导生成的 VC++ 项目的主项目文件。 
-它包含生成该文件的 Visual C++ 的版本信息，以及有关使用应用程序向导选择的平台、配置和项目功能的信息。
+    This is the main project file for VC++ projects generated using an application wizard.
+    It contains information about the version of Visual C++ that generated the file, and
+    information about the platforms, configurations, and project features selected with the
+    application wizard.
 
 CPR.vcxproj.filters
-    这是使用“应用程序向导”生成的 VC++ 项目筛选器文件。
-    它包含有关项目文件与筛选器之间的关联信息。在 IDE 中，通过这种关联，在特定节点下以分组形式显示具有相似扩展名的文件。例如，“.cpp”文件与“源文件”筛选器关联。
+    This is the filters file for VC++ projects generated using an Application Wizard. 
+    It contains information about the association between the files in your project 
+    and the filters. This association is used in the IDE to show grouping of files with
+    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
+    "Source Files" filter).
 
 CPR.h
-这是应用程序的主要头文件。它包括其他项目特定的头文件(包括 Resource.h)，并声明 CCPRApp 应用程序类。
+    This is the main header file for the application.  It includes other
+    project specific headers (including Resource.h) and declares the
+    CCPRApp application class.
 
 CPR.cpp
-这是包含应用程序类 CCPRApp 的主要应用程序源文件。
+    This is the main application source file that contains the application
+    class CCPRApp.
 
 CPR.rc
-这是程序使用的所有 Microsoft Windows 资源的列表。它包括 RES 子目录中存储的图标、位图和光标。此文件可以直接在 Microsoft Visual C++ 中进行编辑。项目资源位于 2052 中。
+    This is a listing of all of the Microsoft Windows resources that the
+    program uses.  It includes the icons, bitmaps, and cursors that are stored
+    in the RES subdirectory.  This file can be directly edited in Microsoft
+    Visual C++. Your project resources are in 1033.
 
 res\CPR.ico
-这是用作应用程序图标的图标文件。此图标包括在主要资源文件 CPR.rc 中。
+    This is an icon file, which is used as the application's icon.  This
+    icon is included by the main resource file CPR.rc.
 
 res\CPR.rc2
-此文件包含不在 Microsoft Visual C++ 中进行编辑的资源。您应该将不可由资源编辑器编辑的所有资源放在此文件中。
+    This file contains resources that are not edited by Microsoft
+    Visual C++. You should place all resources not editable by
+    the resource editor in this file.
 
 
 /////////////////////////////////////////////////////////////////////////////
 
-应用程序向导创建一个对话框类:
+The application wizard creates one dialog class:
 
-CPRDlg.h，CPRDlg.cpp - 对话框
-这些文件包含 CCPRDlg 类。该类定义应用程序主对话框的行为。该对话框的模板位于 CPR.rc 中，该文件可以在 Microsoft Visual C++ 中进行编辑。
+CPRDlg.h, CPRDlg.cpp - the dialog
+    These files contain your CCPRDlg class.  This class defines
+    the behavior of your application's main dialog.  The dialog's template is
+    in CPR.rc, which can be edited in Microsoft Visual C++.
 
-
-/////////////////////////////////////////////////////////////////////////////
-
-其他功能:
-
-ActiveX 控件
-应用程序包括对使用 ActiveX 控件的支持。
 
 /////////////////////////////////////////////////////////////////////////////
 
-其他标准文件:
+Other Features:
 
-StdAfx.h，StdAfx.cpp
-这些文件用于生成名为 CPR.pch 的预编译头 (PCH) 文件和名为 StdAfx.obj 的预编译类型文件。
+ActiveX Controls
+    The application includes support to use ActiveX controls.
+
+/////////////////////////////////////////////////////////////////////////////
+
+Other standard files:
+
+StdAfx.h, StdAfx.cpp
+    These files are used to build a precompiled header (PCH) file
+    named CPR.pch and a precompiled types file named StdAfx.obj.
 
 Resource.h
-这是标准头文件，它定义新的资源 ID。
-Microsoft Visual C++ 读取并更新此文件。
+    This is the standard header file, which defines new resource IDs.
+    Microsoft Visual C++ reads and updates this file.
 
 CPR.manifest
-	应用程序清单文件供 Windows XP 用来描述应用程序
-	对特定版本并行程序集的依赖性。加载程序使用此
-	信息从程序集缓存加载适当的程序集或
-	从应用程序加载私有信息。应用程序清单可能为了重新分发而作为
-	与应用程序可执行文件安装在相同文件夹中的外部 .manifest 文件包括，
-	也可能以资源的形式包括在该可执行文件中。 
+	Application manifest files are used by Windows XP to describe an applications
+	dependency on specific versions of Side-by-Side assemblies. The loader uses this
+	information to load the appropriate assembly from the assembly cache or private
+	from the application. The Application manifest  maybe included for redistribution
+	as an external .manifest file that is installed in the same folder as the application
+	executable or it may be included in the executable in the form of a resource.
 /////////////////////////////////////////////////////////////////////////////
 
-其他注释:
+Other notes:
 
-应用程序向导使用“TODO:”指示应添加或自定义的源代码部分。
+The application wizard uses "TODO:" to indicate parts of the source code you
+should add to or customize.
 
-如果应用程序在共享的 DLL 中使用 MFC，则需要重新发布这些 MFC DLL；如果应用程序所用的语言与操作系统的当前区域设置不同，则还需要重新发布对应的本地化资源 MFC100XXX.DLL。有关这两个主题的更多信息，请参见 MSDN 文档中有关 Redistributing Visual C++ applications (重新发布 Visual C++ 应用程序)的章节。
+If your application uses MFC in a shared DLL, you will need
+to redistribute the MFC DLLs. If your application is in a language
+other than the operating system's locale, you will also have to
+redistribute the corresponding localized resources MFC100XXX.DLL.
+For more information on both of these topics, please see the section on
+redistributing Visual C++ applications in MSDN documentation.
 
 /////////////////////////////////////////////////////////////////////////////
