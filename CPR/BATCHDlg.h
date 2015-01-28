@@ -24,4 +24,9 @@ public:
 	CString m_path;
 	CString m_res;
 	CEdit m_ctr_path;
+	CString m_savepath;
+	afx_msg void OnBnClickedButtonSavepath();
+	afx_msg void OnBnClickedButtonLocation();
+	vector<CString>  m_images;
+	afx_msg void OnBnClickedButtonChannel1();
 };
