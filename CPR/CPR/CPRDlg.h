@@ -32,4 +32,5 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonOpenimage();
 	void DrawPicToHDC(IplImage * img, UINT ID);
+	afx_msg void OnBnClickedButtonBatchoperate();
 };

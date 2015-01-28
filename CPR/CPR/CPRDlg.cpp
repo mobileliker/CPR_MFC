@@ -7,6 +7,8 @@
 #include "CPRDlg.h"
 #include "afxdialogex.h"
 
+#include "BATCHDlg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -64,6 +66,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_OPENIMAGE, &CCPRDlg::OnBnClickedButtonOpenimage)
+	ON_BN_CLICKED(IDC_BUTTON_BATCHOPERATE, &CCPRDlg::OnBnClickedButtonBatchoperate)
 END_MESSAGE_MAP()
 
 
@@ -189,4 +192,11 @@ void CCPRDlg::DrawPicToHDC(IplImage * img, UINT ID)
 	cimg.CopyOf( img ); // 复制图片
 	cimg.DrawToHDC( hDC, &rect ); // 将图片绘制到显示控件的指定区域内
 	ReleaseDC( pDC );
+}
+
+
+void CCPRDlg::OnBnClickedButtonBatchoperate()
+{
+	CBATCHDlg dlg;
+	dlg.DoModal();
 }

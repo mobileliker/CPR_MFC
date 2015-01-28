@@ -101,6 +101,7 @@
     <None Include="res\CPR.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BATCHDlg.h" />
     <ClInclude Include="CPR.h" />
     <ClInclude Include="CPRDlg.h" />
     <ClInclude Include="CvvImage.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BATCHDlg.cpp" />
     <ClCompile Include="CPR.cpp" />
     <ClCompile Include="CPRDlg.cpp" />
     <ClCompile Include="CvvImage.cpp" />
