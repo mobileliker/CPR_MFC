@@ -45,6 +45,9 @@
     <ClInclude Include="BATCHDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PlateLocate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPR.cpp">
@@ -60,6 +63,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BATCHDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlateLocate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

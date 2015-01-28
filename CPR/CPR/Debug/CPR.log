@@ -1,11 +1,11 @@
-﻿生成启动时间为 1/28/2015 2:50:43 PM。
+﻿生成启动时间为 1/28/2015 6:27:45 PM。
      1>项目“D:\Data\Code\CPR\CPR\CPR\CPR.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Debug\CPR.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
          所有输出均为最新。
-         d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\CPR.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt BATCHDlg.cpp
-         BATCHDlg.cpp
+         d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _MBCS /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\CPR.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt CPRDlg.cpp
+         CPRDlg.cpp
        ResourceCompile:
          所有输出均为最新。
        ManifestResourceCompile:
@@ -17,6 +17,7 @@
          Debug\CPR.obj
          Debug\CPRDlg.obj
          Debug\CvvImage.obj
+         Debug\PlateLocate.obj
          Debug\stdafx.obj
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\CPR.exe.embed.manifest" /manifest Debug\CPR.exe.intermediate.manifest "d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
@@ -31,4 +32,4 @@
 
 生成成功。
 
-已用时间 00:00:01.89
+已用时间 00:00:02.46

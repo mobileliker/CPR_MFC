@@ -3,7 +3,9 @@
 //
 
 #pragma once
+#include "d:\program files\opencv2.4.8\build\include\opencv2\core\core.hpp"
 
+#include <highgui.h>
 
 // CCPRDlg dialog
 class CCPRDlg : public CDialogEx
@@ -33,4 +35,7 @@ public:
 	afx_msg void OnBnClickedButtonOpenimage();
 	void DrawPicToHDC(IplImage * img, UINT ID);
 	afx_msg void OnBnClickedButtonBatchoperate();
+	afx_msg void OnBnClickedButtonLocation();
+	cv::Mat m_src;
+	vector<cv::Mat> m_locs;
 };

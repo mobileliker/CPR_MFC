@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EasyPR", "..\EasyPR\EasyPR.vcxproj", "{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPR", "CPR\CPR.vcxproj", "{8EFAB8F4-3F2A-449F-B2C4-6CF0F117B0E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE} = {62ADD040-59C5-4D8E-A065-8C5D0CD777BE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EasyPR", "EasyPR\EasyPR.vcxproj", "{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,14 +14,14 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Debug|Win32.Build.0 = Debug|Win32
-		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Release|Win32.ActiveCfg = Release|Win32
-		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Release|Win32.Build.0 = Release|Win32
 		{8EFAB8F4-3F2A-449F-B2C4-6CF0F117B0E5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{8EFAB8F4-3F2A-449F-B2C4-6CF0F117B0E5}.Debug|Win32.Build.0 = Debug|Win32
 		{8EFAB8F4-3F2A-449F-B2C4-6CF0F117B0E5}.Release|Win32.ActiveCfg = Release|Win32
 		{8EFAB8F4-3F2A-449F-B2C4-6CF0F117B0E5}.Release|Win32.Build.0 = Release|Win32
+		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Debug|Win32.Build.0 = Debug|Win32
+		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Release|Win32.ActiveCfg = Release|Win32
+		{62ADD040-59C5-4D8E-A065-8C5D0CD777BE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

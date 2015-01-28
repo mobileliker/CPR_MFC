@@ -9,9 +9,12 @@
 
 #include "BATCHDlg.h"
 
+#include "PlateLocate.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
 
 
 // CAboutDlg dialog used for App About
@@ -67,6 +70,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_OPENIMAGE, &CCPRDlg::OnBnClickedButtonOpenimage)
 	ON_BN_CLICKED(IDC_BUTTON_BATCHOPERATE, &CCPRDlg::OnBnClickedButtonBatchoperate)
+	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CCPRDlg::OnBnClickedButtonLocation)
 END_MESSAGE_MAP()
 
 
@@ -175,6 +179,7 @@ void CCPRDlg::OnBnClickedButtonOpenimage()
 		IplImage *image = NULL; //Ô­Ê¼Í¼Ïñ
 		if(image) cvReleaseImage(&image);
 		image = cvLoadImage(strFilePath, 1); //ÏÔÊ¾Í¼Æ¬
+		m_src = image;
 		DrawPicToHDC(image, IDC_ORIGINALIMAGE);
     }   
 
@@ -199,4 +204,32 @@ void CCPRDlg::OnBnClickedButtonBatchoperate()
 {
 	CBATCHDlg dlg;
 	dlg.DoModal();
+}
+
+
+void CCPRDlg::OnBnClickedButtonLocation()
+{
+	UINT ids[] = {IDC_LOCATIONIMAGE1, IDC_LOCATIONIMAGE2, IDC_LOCATIONIMAGE3, 
+		IDC_LOCATIONIMAGE4, IDC_LOCATIONIMAGE5, IDC_LOCATIONIMAGE6};
+
+	vector<Mat> resultVec;
+	CPlateLocate plate;
+	plate.setDebug(1);
+	plate.setGaussianBlurSize(5);
+	plate.setMorphSizeWidth(17);
+
+	int result = plate.plateLocate(m_src, resultVec);
+	if (result == 0)
+	{
+		int num = resultVec.size();
+		for (int j = 0; j < num && j < 6; j++)
+		{
+			Mat resultMat = resultVec[j];
+			IplImage pImg = resultMat;
+			DrawPicToHDC(&pImg, ids[j]);
+			//imshow("plate_locate", resultMat);
+			//waitKey(0);
+		}
+	}
+	
 }
