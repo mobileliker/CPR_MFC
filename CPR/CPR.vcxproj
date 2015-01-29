@@ -109,7 +109,9 @@
     <ClInclude Include="CPR.h" />
     <ClInclude Include="CPRDlg.h" />
     <ClInclude Include="CvvImage.h" />
+    <ClInclude Include="PlateJudge.h" />
     <ClInclude Include="PlateLocate.h" />
+    <ClInclude Include="prep.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -119,6 +121,7 @@
     <ClCompile Include="CPR.cpp" />
     <ClCompile Include="CPRDlg.cpp" />
     <ClCompile Include="CvvImage.cpp" />
+    <ClCompile Include="PlateJudge.cpp" />
     <ClCompile Include="PlateLocate.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

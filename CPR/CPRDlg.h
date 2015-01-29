@@ -37,5 +37,5 @@ public:
 	afx_msg void OnBnClickedButtonBatchoperate();
 	afx_msg void OnBnClickedButtonLocation();
 	cv::Mat m_src;
-	vector<cv::Mat> m_locs;
+	std::vector<cv::Mat> m_locs;
 };

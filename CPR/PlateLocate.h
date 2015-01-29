@@ -1,4 +1,9 @@
 #pragma once
+
+#include <highgui.h>
+
+using namespace cv;
+
 class CPlateLocate
 {
 public:

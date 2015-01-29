@@ -48,6 +48,12 @@
     <ClInclude Include="PlateLocate.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PlateJudge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="prep.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPR.cpp">
@@ -66,6 +72,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PlateLocate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlateJudge.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "PlateLocate.h"
+#include "prep.h"
 
 const float DEFAULT_ERROR = 0.6;
 const float DEFAULT_ASPECT = 3.75; 

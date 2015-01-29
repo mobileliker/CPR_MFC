@@ -1,6 +1,8 @@
 #pragma once
 #include "afxwin.h"
 
+#include <vector>
+
 
 // CBATCHDlg ¶Ô»°¿ò
 
@@ -27,6 +29,6 @@ public:
 	CString m_savepath;
 	afx_msg void OnBnClickedButtonSavepath();
 	afx_msg void OnBnClickedButtonLocation();
-	vector<CString>  m_images;
+	std::vector<CString>  m_images;
 	afx_msg void OnBnClickedButtonChannel1();
 };

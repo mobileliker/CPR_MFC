@@ -6,11 +6,10 @@
 #include "BATCHDlg.h"
 #include "afxdialogex.h"
 
-#include <vector>
-
 #include "PlateLocate.h"
 
-using std::vector;
+#include "prep.h"
+
 
 
 // CBATCHDlg ¶Ô»°¿ò
