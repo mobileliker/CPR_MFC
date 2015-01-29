@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 
 #include "PlateLocate.h"
+#include "PlateJudge.h"
 
 #include "prep.h"
 
@@ -43,6 +44,7 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SAVEPATH, &CBATCHDlg::OnBnClickedButtonSavepath)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CBATCHDlg::OnBnClickedButtonLocation)
 	ON_BN_CLICKED(IDC_BUTTON_CHANNEL1, &CBATCHDlg::OnBnClickedButtonChannel1)
+	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CBATCHDlg::OnBnClickedButtonJudge)
 END_MESSAGE_MAP()
 
 
@@ -194,5 +196,27 @@ void CBATCHDlg::OnBnClickedButtonChannel1()
 		ss << this->m_savepath << "\\" << v_i << "_channel1" << ".jpg";
 		imwrite(ss.str(), src);
 
+	}
+}
+
+
+void CBATCHDlg::OnBnClickedButtonJudge()
+{
+	// TODO:
+	CPlateJudge plate;
+	plate.setDebug(0);
+
+
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		int result = plate.plateJudge(src);
+		if (result == 1)
+		{
+			stringstream ss(stringstream::in | stringstream::out);
+			ss << this->m_savepath << "\\" << v_i << "_judge" << ".jpg";
+			imwrite(ss.str(), src);
+		}
 	}
 }

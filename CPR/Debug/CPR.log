@@ -1,12 +1,15 @@
-﻿生成启动时间为 1/29/2015 1:17:00 PM。
+﻿生成启动时间为 1/29/2015 3:22:09 PM。
      1>项目“D:\Data\Code\CPR\CPR\CPR.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在对“Debug\CPR.unsuccessfulbuild”执行 Touch 任务。
+         正在创建“Debug\CPR.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
          所有输出均为最新。
-         d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _MBCS /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\CPR.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt BATCHDlg.cpp CPRDlg.cpp
-         CPRDlg.cpp
+         d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _MBCS /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\CPR.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt BATCHDlg.cpp CPRDlg.cpp PlateJudge.cpp
+         PlateJudge.cpp
          BATCHDlg.cpp
+         正在生成代码...
+         正在编译...
+         CPRDlg.cpp
          正在生成代码...
        ResourceCompile:
          所有输出均为最新。
@@ -35,4 +38,4 @@
 
 生成成功。
 
-已用时间 00:00:01.73
+已用时间 00:00:01.64

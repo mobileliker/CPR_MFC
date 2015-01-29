@@ -10,6 +10,9 @@
 #include "BATCHDlg.h"
 
 #include "PlateLocate.h"
+#include "PlateJudge.h"
+
+#include "prep.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -71,6 +74,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_OPENIMAGE, &CCPRDlg::OnBnClickedButtonOpenimage)
 	ON_BN_CLICKED(IDC_BUTTON_BATCHOPERATE, &CCPRDlg::OnBnClickedButtonBatchoperate)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CCPRDlg::OnBnClickedButtonLocation)
+	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CCPRDlg::OnBnClickedButtonJudge)
 END_MESSAGE_MAP()
 
 
@@ -106,7 +110,7 @@ BOOL CCPRDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
+	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -126,6 +130,7 @@ void CCPRDlg::OnSysCommand(UINT nID, LPARAM lParam)
 // If you add a minimize button to your dialog, you will need the code below
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
+
 
 void CCPRDlg::OnPaint()
 {
@@ -199,6 +204,31 @@ void CCPRDlg::DrawPicToHDC(IplImage * img, UINT ID)
 	ReleaseDC( pDC );
 }
 
+UINT ids[] = {IDC_LOCATIONIMAGE1, IDC_LOCATIONIMAGE2, IDC_LOCATIONIMAGE3, 
+	IDC_LOCATIONIMAGE4, IDC_LOCATIONIMAGE5, IDC_LOCATIONIMAGE6};
+
+void CCPRDlg::ResetDisImg()
+{
+
+	IplImage *defaultImg = cvCreateImage(cvSize(1,1), 8, 1);
+	CvScalar scalar = cvGet2D(defaultImg, 0, 0);
+	scalar.val[0] = 105;
+	cvSet2D(defaultImg, 0, 0, scalar);
+
+	for(int i = 0; i < 6; ++i)
+	{
+		CDC *pDC = GetDlgItem(ids[i])->GetDC();
+		HDC hDC= pDC->GetSafeHdc();
+		CRect rect;
+		GetDlgItem(ids[i])->GetClientRect(&rect);
+		CvvImage cimg;
+		cimg.CopyOf( defaultImg ); // 复制图片
+		cimg.DrawToHDC( hDC, &rect ); // 将图片绘制到显示控件的指定区域内
+		ReleaseDC( pDC );
+	}
+
+}
+
 
 void CCPRDlg::OnBnClickedButtonBatchoperate()
 {
@@ -207,24 +237,23 @@ void CCPRDlg::OnBnClickedButtonBatchoperate()
 }
 
 
+
 void CCPRDlg::OnBnClickedButtonLocation()
 {
-	UINT ids[] = {IDC_LOCATIONIMAGE1, IDC_LOCATIONIMAGE2, IDC_LOCATIONIMAGE3, 
-		IDC_LOCATIONIMAGE4, IDC_LOCATIONIMAGE5, IDC_LOCATIONIMAGE6};
 
-	vector<Mat> resultVec;
+	m_locs.clear();
 	CPlateLocate plate;
 	plate.setDebug(1);
 	plate.setGaussianBlurSize(5);
 	plate.setMorphSizeWidth(17);
 
-	int result = plate.plateLocate(m_src, resultVec);
+	int result = plate.plateLocate(m_src, m_locs);
 	if (result == 0)
 	{
-		int num = resultVec.size();
+		int num = m_locs.size();
 		for (int j = 0; j < num && j < 6; j++)
 		{
-			Mat resultMat = resultVec[j];
+			Mat resultMat = m_locs[j];
 			IplImage pImg = resultMat;
 			DrawPicToHDC(&pImg, ids[j]);
 			//imshow("plate_locate", resultMat);
@@ -232,4 +261,30 @@ void CCPRDlg::OnBnClickedButtonLocation()
 		}
 	}
 	
+}
+
+
+void CCPRDlg::OnBnClickedButtonJudge()
+{
+
+	//经过SVM判断后得到的图块集合
+	m_jdgs.clear();
+
+	CPlateJudge ju;
+	ju.setDebug(1);
+	int resultJu = ju.plateJudge(m_locs, m_jdgs);
+	
+	ResetDisImg();
+	if (0 == resultJu)
+	{
+		int num = m_jdgs.size();
+		for (int j = 0; j < num; j++)
+		{
+			Mat resultMat = m_jdgs[j];
+			IplImage pImg = resultMat;
+			DrawPicToHDC(&pImg, ids[j]);
+		}
+	}
+
+	return;
 }

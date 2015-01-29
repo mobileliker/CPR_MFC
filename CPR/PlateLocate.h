@@ -1,5 +1,17 @@
 #pragma once
-
+//////////////////////////////////////////////////////////////////////////
+// Name:	    plate_locate Header
+// Version:		1.1
+// Date:	    2014-09-19
+// MDate:		2015-01-29
+// Author:	    liuruoze
+// MAuthor:		WayneWu
+// Copyright:   liuruoze
+// Reference:	Mastering OpenCV with Practical Computer Vision Projects
+// Reference:	CSDN Bloger taotao1233
+// Desciption:  
+// Defines CPlateLocate
+//////////////////////////////////////////////////////////////////////////
 #include <highgui.h>
 
 using namespace cv;

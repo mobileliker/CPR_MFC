@@ -31,4 +31,5 @@ public:
 	afx_msg void OnBnClickedButtonLocation();
 	std::vector<CString>  m_images;
 	afx_msg void OnBnClickedButtonChannel1();
+	afx_msg void OnBnClickedButtonJudge();
 };

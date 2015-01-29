@@ -34,8 +34,11 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonOpenimage();
 	void DrawPicToHDC(IplImage * img, UINT ID);
+	void ResetDisImg();
 	afx_msg void OnBnClickedButtonBatchoperate();
 	afx_msg void OnBnClickedButtonLocation();
 	cv::Mat m_src;
 	std::vector<cv::Mat> m_locs;
+	std::vector<cv::Mat> m_jdgs;
+	afx_msg void OnBnClickedButtonJudge();
 };
