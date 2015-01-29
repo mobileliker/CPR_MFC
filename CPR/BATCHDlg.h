@@ -32,4 +32,5 @@ public:
 	std::vector<CString>  m_images;
 	afx_msg void OnBnClickedButtonChannel1();
 	afx_msg void OnBnClickedButtonJudge();
+	afx_msg void OnBnClickedButtonDetect();
 };

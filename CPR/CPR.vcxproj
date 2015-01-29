@@ -109,6 +109,7 @@
     <ClInclude Include="CPR.h" />
     <ClInclude Include="CPRDlg.h" />
     <ClInclude Include="CvvImage.h" />
+    <ClInclude Include="PlateDetect.h" />
     <ClInclude Include="PlateJudge.h" />
     <ClInclude Include="PlateLocate.h" />
     <ClInclude Include="prep.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="CPR.cpp" />
     <ClCompile Include="CPRDlg.cpp" />
     <ClCompile Include="CvvImage.cpp" />
+    <ClCompile Include="PlateDetect.cpp" />
     <ClCompile Include="PlateJudge.cpp" />
     <ClCompile Include="PlateLocate.cpp" />
     <ClCompile Include="stdafx.cpp">

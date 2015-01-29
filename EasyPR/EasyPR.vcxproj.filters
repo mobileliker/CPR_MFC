@@ -25,6 +25,7 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="train\训练说明.txt" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cpp\chars_identify.cpp">

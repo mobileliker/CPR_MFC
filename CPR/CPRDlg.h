@@ -40,5 +40,7 @@ public:
 	cv::Mat m_src;
 	std::vector<cv::Mat> m_locs;
 	std::vector<cv::Mat> m_jdgs;
+	std::vector<cv::Mat> m_dtts;
 	afx_msg void OnBnClickedButtonJudge();
+	afx_msg void OnBnClickedButtonDetect();
 };

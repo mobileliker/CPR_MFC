@@ -54,6 +54,9 @@
     <ClInclude Include="prep.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PlateDetect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPR.cpp">
@@ -75,6 +78,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PlateJudge.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlateDetect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

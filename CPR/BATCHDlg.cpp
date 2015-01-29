@@ -8,6 +8,7 @@
 
 #include "PlateLocate.h"
 #include "PlateJudge.h"
+#include "PlateDetect.h"
 
 #include "prep.h"
 
@@ -45,6 +46,7 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CBATCHDlg::OnBnClickedButtonLocation)
 	ON_BN_CLICKED(IDC_BUTTON_CHANNEL1, &CBATCHDlg::OnBnClickedButtonChannel1)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CBATCHDlg::OnBnClickedButtonJudge)
+	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CBATCHDlg::OnBnClickedButtonDetect)
 END_MESSAGE_MAP()
 
 
@@ -217,6 +219,34 @@ void CBATCHDlg::OnBnClickedButtonJudge()
 			stringstream ss(stringstream::in | stringstream::out);
 			ss << this->m_savepath << "\\" << v_i << "_judge" << ".jpg";
 			imwrite(ss.str(), src);
+		}
+	}
+}
+
+
+void CBATCHDlg::OnBnClickedButtonDetect()
+{
+	// TODO: 
+	CPlateDetect plate;
+
+
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		int result = plate.plateDetect(src, resultVec);
+		if (result == 0)
+		{
+			int num = resultVec.size();
+			for (int j = 0; j < num; j++)
+			{
+				Mat resultMat = resultVec[j];
+				//IplImage pImg = resultMat;
+				stringstream ss(stringstream::in | stringstream::out);
+				ss << this->m_savepath << "\\" << v_i << "_detect" << j << ".jpg";
+				imwrite(ss.str(), resultMat);
+			}
 		}
 	}
 }

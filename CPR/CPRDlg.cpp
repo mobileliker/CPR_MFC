@@ -11,6 +11,7 @@
 
 #include "PlateLocate.h"
 #include "PlateJudge.h"
+#include "PlateDetect.h"
 
 #include "prep.h"
 
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_BATCHOPERATE, &CCPRDlg::OnBnClickedButtonBatchoperate)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CCPRDlg::OnBnClickedButtonLocation)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CCPRDlg::OnBnClickedButtonJudge)
+	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CCPRDlg::OnBnClickedButtonDetect)
 END_MESSAGE_MAP()
 
 
@@ -248,16 +250,13 @@ void CCPRDlg::OnBnClickedButtonLocation()
 	plate.setMorphSizeWidth(17);
 
 	int result = plate.plateLocate(m_src, m_locs);
-	if (result == 0)
+	if (0 == result)
 	{
-		int num = m_locs.size();
-		for (int j = 0; j < num && j < 6; j++)
+		for (int j = 0; j < m_locs.size() && j < 6; j++)
 		{
 			Mat resultMat = m_locs[j];
 			IplImage pImg = resultMat;
 			DrawPicToHDC(&pImg, ids[j]);
-			//imshow("plate_locate", resultMat);
-			//waitKey(0);
 		}
 	}
 	
@@ -277,10 +276,32 @@ void CCPRDlg::OnBnClickedButtonJudge()
 	ResetDisImg();
 	if (0 == resultJu)
 	{
-		int num = m_jdgs.size();
-		for (int j = 0; j < num; j++)
+		for (int j = 0; j < m_jdgs.size() && j < 6; j++)
 		{
 			Mat resultMat = m_jdgs[j];
+			IplImage pImg = resultMat;
+			DrawPicToHDC(&pImg, ids[j]);
+		}
+	}
+
+	return;
+}
+
+
+void CCPRDlg::OnBnClickedButtonDetect()
+{
+	// TODO: 
+	m_dtts.clear();
+
+	CPlateDetect pd;
+
+	int result = pd.plateDetect(m_src, m_dtts);
+
+	if (0 == result)
+	{
+		for (int j = 0; j < m_dtts.size() && j < 6; j++)
+		{
+			Mat resultMat = m_dtts[j];
 			IplImage pImg = resultMat;
 			DrawPicToHDC(&pImg, ids[j]);
 		}
