@@ -43,4 +43,5 @@ public:
 	std::vector<cv::Mat> m_dtts;
 	afx_msg void OnBnClickedButtonJudge();
 	afx_msg void OnBnClickedButtonDetect();
+	afx_msg void OnBnClickedButtonSegment();
 };

@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BATCHDlg.h" />
+    <ClInclude Include="CharsSegment.h" />
     <ClInclude Include="CPR.h" />
     <ClInclude Include="CPRDlg.h" />
     <ClInclude Include="CvvImage.h" />
@@ -119,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BATCHDlg.cpp" />
+    <ClCompile Include="CharsSegment.cpp" />
     <ClCompile Include="CPR.cpp" />
     <ClCompile Include="CPRDlg.cpp" />
     <ClCompile Include="CvvImage.cpp" />

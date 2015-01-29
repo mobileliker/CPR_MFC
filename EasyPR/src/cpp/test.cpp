@@ -25,9 +25,9 @@ int main()
 {
 	//assert (test_plate_locate() == 0);
 	//assert (test_plate_judge() == 0);
-	assert (test_plate_detect() == 0);
+	//assert (test_plate_detect() == 0);
 
-	//assert (test_chars_segment() == 0);
+	assert (test_chars_segment() == 0);
 	//assert (test_chars_identify() == 0);
 	//assert (test_chars_recognise() == 0);
 

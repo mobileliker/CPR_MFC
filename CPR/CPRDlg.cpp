@@ -12,6 +12,7 @@
 #include "PlateLocate.h"
 #include "PlateJudge.h"
 #include "PlateDetect.h"
+#include "CharsSegment.h"
 
 #include "prep.h"
 
@@ -77,6 +78,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION, &CCPRDlg::OnBnClickedButtonLocation)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CCPRDlg::OnBnClickedButtonJudge)
 	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CCPRDlg::OnBnClickedButtonDetect)
+	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CCPRDlg::OnBnClickedButtonSegment)
 END_MESSAGE_MAP()
 
 
@@ -288,6 +290,7 @@ void CCPRDlg::OnBnClickedButtonJudge()
 }
 
 
+
 void CCPRDlg::OnBnClickedButtonDetect()
 {
 	// TODO: 
@@ -308,4 +311,44 @@ void CCPRDlg::OnBnClickedButtonDetect()
 	}
 
 	return;
+}
+
+
+UINT idss[][7] = 
+{
+	{IDC_SEGMENT11, IDC_SEGMENT12, IDC_SEGMENT13, IDC_SEGMENT14, IDC_SEGMENT15, IDC_SEGMENT16, IDC_SEGMENT17},
+	{IDC_SEGMENT21, IDC_SEGMENT22, IDC_SEGMENT23, IDC_SEGMENT24, IDC_SEGMENT25, IDC_SEGMENT26, IDC_SEGMENT27},
+	{IDC_SEGMENT31, IDC_SEGMENT32, IDC_SEGMENT33, IDC_SEGMENT34, IDC_SEGMENT35, IDC_SEGMENT36, IDC_SEGMENT37},
+	{IDC_SEGMENT41, IDC_SEGMENT42, IDC_SEGMENT43, IDC_SEGMENT44, IDC_SEGMENT45, IDC_SEGMENT46, IDC_SEGMENT47},
+	{IDC_SEGMENT51, IDC_SEGMENT52, IDC_SEGMENT53, IDC_SEGMENT54, IDC_SEGMENT55, IDC_SEGMENT56, IDC_SEGMENT57},
+	{IDC_SEGMENT61, IDC_SEGMENT62, IDC_SEGMENT63, IDC_SEGMENT64, IDC_SEGMENT65, IDC_SEGMENT66, IDC_SEGMENT67}
+}
+;
+
+void CCPRDlg::OnBnClickedButtonSegment()
+{
+	// TODO: 
+	
+	vector<vector<Mat>> vv_dst;
+	CCharsSegment plate;
+	plate.setDebug(1);
+
+	for(vector<Mat>::size_type v_i = 0; v_i != m_dtts.size(); ++v_i)
+	{
+		vector<Mat> v_dst;
+		int result = plate.charsSegment(m_dtts[v_i], v_dst);
+		if(0 == result)
+		{
+			vv_dst.push_back(v_dst);
+			if(v_i < 6)
+			{
+				for(int i = 0; i < 7 && i < v_dst.size(); ++i)
+				{
+					IplImage pImg = v_dst[i];
+					DrawPicToHDC(&pImg, idss[v_i][i]);
+				}
+			}
+		}
+
+	}
 }
