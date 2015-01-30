@@ -1,4 +1,4 @@
-﻿生成启动时间为 1/30/2015 3:12:46 PM。
+﻿生成启动时间为 1/30/2015 3:48:08 PM。
      1>项目“D:\Data\Code\CPR\CPR\CPR.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Debug\CPR.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
@@ -6,7 +6,8 @@
          所有输出均为最新。
          d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _MBCS /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\CPR.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt BATCHDlg.cpp
          BATCHDlg.cpp
-     1>d:\data\code\cpr\cpr\batchdlg.cpp(280): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\data\code\cpr\cpr\batchdlg.cpp(282): warning C4018: “<”: 有符号/无符号不匹配
+     1>d:\data\code\cpr\cpr\batchdlg.cpp(429): warning C4018: “<”: 有符号/无符号不匹配
        ResourceCompile:
          所有输出均为最新。
        ManifestResourceCompile:
@@ -24,6 +25,7 @@
          Debug\PlateDetect.obj
          Debug\PlateJudge.obj
          Debug\PlateLocate.obj
+         Debug\PlateRecognize.obj
          Debug\stdafx.obj
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\CPR.exe.embed.manifest" /manifest Debug\CPR.exe.intermediate.manifest "d:\ProgramFiles86\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
@@ -38,4 +40,4 @@
 
 生成成功。
 
-已用时间 00:00:02.33
+已用时间 00:00:01.33

@@ -12,6 +12,7 @@
 #include "CharsIdentify.h"
 #include "CharsSegment.h"
 #include "CharsRecognise.h"
+#include "PlateRecognize.h"
 
 #include <fstream>
 #include <direct.h>
@@ -56,7 +57,8 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CBATCHDlg::OnBnClickedButtonSegment)
 	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CBATCHDlg::OnBnClickedButtonIdentify)
 	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CBATCHDlg::OnBnClickedButtonRecognise)
-	ON_BN_CLICKED(IDC_BUTTON_RECOGNISEOTHERS, &CBATCHDlg::OnBnClickedButtonRecogniseothers)
+	ON_BN_CLICKED(IDC_BUTTON_IDENTIFYOTHERS, &CBATCHDlg::OnBnClickedButtonRecogniseothers)
+	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE, &CBATCHDlg::OnBnClickedButtonPlaterecognize)
 END_MESSAGE_MAP()
 
 
@@ -389,4 +391,53 @@ void CBATCHDlg::OnBnClickedButtonRecogniseothers()
 	resfile << res_str.c_str();
 	resfile.close();
 
+}
+
+
+void CBATCHDlg::OnBnClickedButtonPlaterecognize()
+{	
+	CPlateRecognize pr;
+	pr.LoadANN("model/ann.xml");
+	pr.LoadSVM("model/svm.xml");
+
+	pr.setGaussianBlurSize(5);
+	pr.setMorphSizeWidth(17);
+
+	pr.setVerifyMin(3);
+	pr.setVerifyMax(20);
+
+	pr.setLiuDingSize(7);
+	pr.setColorThreshold(150);
+
+	string res_str = "";
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		vector<string> plateVec;
+
+		res_str += m_images[v_i];
+		res_str += " Result: ";
+
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		string str_cr;
+
+		int result = pr.plateRecognize(src, plateVec);
+		if (result == 0)
+		{
+			for(int i = 0; i < plateVec.size(); ++i) { res_str += " "; res_str += plateVec[i]; }
+			res_str += "\r\n";
+		}
+		else
+		{
+			res_str += "No Answer\r\n";
+		}
+	}
+	m_res = res_str.c_str();
+	UpdateData(FALSE);
+
+	CString filePath = this->m_savepath + "\\plate_recognize.txt";
+	std::ofstream resfile(filePath);
+	resfile << res_str.c_str();
+	resfile.close();
 }

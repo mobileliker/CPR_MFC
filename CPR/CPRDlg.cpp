@@ -15,6 +15,7 @@
 #include "CharsSegment.h"
 #include "CharsIdentify.h"
 #include "CharsRecognise.h"
+#include "PlateRecognize.h"
 
 #include "prep.h"
 
@@ -83,6 +84,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CCPRDlg::OnBnClickedButtonSegment)
 	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CCPRDlg::OnBnClickedButtonIdentify)
 	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CCPRDlg::OnBnClickedButtonRecognise)
+	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE, &CCPRDlg::OnBnClickedButtonPlaterecognize)
 END_MESSAGE_MAP()
 
 
@@ -407,4 +409,39 @@ void CCPRDlg::OnBnClickedButtonRecognise()
 			}
 		}
 	}
+}
+
+
+void CCPRDlg::OnBnClickedButtonPlaterecognize()
+{
+	ResetResStr();
+
+	CPlateRecognize pr;
+	pr.LoadANN("model/ann.xml");
+	pr.LoadSVM("model/svm.xml");
+
+	pr.setGaussianBlurSize(5);
+	pr.setMorphSizeWidth(17);
+
+	pr.setVerifyMin(3);
+	pr.setVerifyMax(20);
+
+	pr.setLiuDingSize(7);
+	pr.setColorThreshold(150);
+
+	vector<string> plateVec;
+
+	int result = pr.plateRecognize(m_src, plateVec);
+	if (result == 0)
+	{
+		int num = plateVec.size();
+		for (int j = 0; j < num; j++)
+		{
+			if(j < 6)
+			{
+				GetDlgItem(res_ids[j])->SetWindowTextA(plateVec[j].c_str());
+			}
+		}
+	}
+
 }

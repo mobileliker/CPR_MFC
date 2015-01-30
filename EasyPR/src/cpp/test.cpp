@@ -29,9 +29,9 @@ int main()
 
 	//assert (test_chars_segment() == 0);
 	//assert (test_chars_identify() == 0);
-	assert (test_chars_recognise() == 0);
+	//assert (test_chars_recognise() == 0);
 
-	//assert (test_plate_recognize() == 0);
+	assert (test_plate_recognize() == 0);
 
 	return 0;
 }
