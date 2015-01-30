@@ -14,6 +14,7 @@
 #include "PlateDetect.h"
 #include "CharsSegment.h"
 #include "CharsIdentify.h"
+#include "CharsRecognise.h"
 
 #include "prep.h"
 
@@ -81,6 +82,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CCPRDlg::OnBnClickedButtonDetect)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CCPRDlg::OnBnClickedButtonSegment)
 	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CCPRDlg::OnBnClickedButtonIdentify)
+	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CCPRDlg::OnBnClickedButtonRecognise)
 END_MESSAGE_MAP()
 
 
@@ -355,9 +357,19 @@ void CCPRDlg::OnBnClickedButtonSegment()
 
 UINT res_ids[] = {IDC_RES1, IDC_RES2, IDC_RES3, IDC_RES4, IDC_RES5, IDC_RES6};
 
+void CCPRDlg::ResetResStr()
+{
+	for(int i = 0; i < 6; ++i)
+	{
+		GetDlgItem(res_ids[i])->SetWindowTextA("");
+	}
+}
+
 void CCPRDlg::OnBnClickedButtonIdentify()
 {
 	CCharsIdentify ci;
+
+	ResetResStr();
 
 	for(int i = 0; i < m_sgms.size(); ++i)
 	{
@@ -371,6 +383,28 @@ void CCPRDlg::OnBnClickedButtonIdentify()
 		if(i < 6)
 		{
 			GetDlgItem(res_ids[i])->SetWindowTextA(plateIdentify.c_str());
+		}
+	}
+}
+
+
+void CCPRDlg::OnBnClickedButtonRecognise()
+{
+	ResetResStr();
+
+	CCharsRecognise cr;
+	string charsRecognise = "";
+
+	for(int i = 0; i < m_dtts.size(); ++i)
+	{
+		int result = cr.charsRecognise(m_dtts[i], charsRecognise);
+		if (0 == result)
+		{
+			//MessageBox(charsRecognise.c_str());		
+			if(i < 6)
+			{
+				GetDlgItem(res_ids[i])->SetWindowTextA(charsRecognise.c_str());
+			}
 		}
 	}
 }

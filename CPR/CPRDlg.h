@@ -35,6 +35,7 @@ public:
 	afx_msg void OnBnClickedButtonOpenimage();
 	void DrawPicToHDC(IplImage * img, UINT ID);
 	void ResetDisImg();
+	void ResetResStr();
 	afx_msg void OnBnClickedButtonBatchoperate();
 	afx_msg void OnBnClickedButtonLocation();
 	cv::Mat m_src;
@@ -46,4 +47,5 @@ public:
 	afx_msg void OnBnClickedButtonDetect();
 	afx_msg void OnBnClickedButtonSegment();
 	afx_msg void OnBnClickedButtonIdentify();
+	afx_msg void OnBnClickedButtonRecognise();
 };

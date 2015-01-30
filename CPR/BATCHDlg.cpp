@@ -9,6 +9,12 @@
 #include "PlateLocate.h"
 #include "PlateJudge.h"
 #include "PlateDetect.h"
+#include "CharsIdentify.h"
+#include "CharsSegment.h"
+#include "CharsRecognise.h"
+
+#include <fstream>
+#include <direct.h>
 
 #include "prep.h"
 
@@ -47,6 +53,10 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_CHANNEL1, &CBATCHDlg::OnBnClickedButtonChannel1)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CBATCHDlg::OnBnClickedButtonJudge)
 	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CBATCHDlg::OnBnClickedButtonDetect)
+	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CBATCHDlg::OnBnClickedButtonSegment)
+	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CBATCHDlg::OnBnClickedButtonIdentify)
+	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CBATCHDlg::OnBnClickedButtonRecognise)
+	ON_BN_CLICKED(IDC_BUTTON_RECOGNISEOTHERS, &CBATCHDlg::OnBnClickedButtonRecogniseothers)
 END_MESSAGE_MAP()
 
 
@@ -249,4 +259,134 @@ void CBATCHDlg::OnBnClickedButtonDetect()
 			}
 		}
 	}
+}
+
+
+void CBATCHDlg::OnBnClickedButtonSegment()
+{	
+	_mkdir(m_savepath + "\\chinese");
+	_mkdir(m_savepath + "\\others");
+
+	CCharsSegment plate;
+
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		int result = plate.charsSegment(src, resultVec);
+		if (0 == result)
+		{
+			for (int j = 0; j < resultVec.size(); j++)
+			{
+				Mat resultMat = resultVec[j];
+				stringstream ss(stringstream::in | stringstream::out);
+				if(0 == j)	ss << m_savepath << "\\chinese\\" << v_i << "_segment" << j << ".jpg";
+				else ss << m_savepath << "\\others\\" << v_i << "_segment" << j << ".jpg";
+				imwrite(ss.str(), resultMat);
+			}
+		}
+	}
+}
+
+
+void CBATCHDlg::OnBnClickedButtonIdentify()
+{
+	CCharsIdentify plate;
+	string res_str = "";
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		res_str += m_images[v_i];
+		res_str += " Result: ";
+
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 0);
+		string str_cr = plate.charsIdentify(src, true);
+		if ("" != str_cr)
+		{
+			res_str += str_cr;
+			res_str += "\r\n";
+		}
+		else
+		{
+			res_str += "No Answer\r\n";
+		}
+	}
+	m_res = res_str.c_str();
+	UpdateData(FALSE);
+
+	
+	CString filePath = this->m_savepath + "\\identify_chinese.txt";
+	std::ofstream resfile(filePath);
+	resfile << res_str.c_str();
+	resfile.close();
+}
+
+
+void CBATCHDlg::OnBnClickedButtonRecognise()
+{	
+	CCharsRecognise plate;
+	string res_str = "";
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		res_str += m_images[v_i];
+		res_str += " Result: ";
+
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		string str_cr;
+		int result = plate.charsRecognise(src, str_cr);
+		if (result == 0)
+		{
+			res_str += str_cr;
+			res_str += "\r\n";
+		}
+		else
+		{
+			res_str += "No Answer\r\n";
+		}
+	}
+	m_res = res_str.c_str();
+	UpdateData(FALSE);
+
+	
+	CString filePath = this->m_savepath + "\\recognise.txt";
+	std::ofstream resfile(filePath);
+	resfile << res_str.c_str();
+	resfile.close();
+}
+
+
+void CBATCHDlg::OnBnClickedButtonRecogniseothers()
+{		
+	CCharsIdentify plate;
+	string res_str = "";
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		res_str += m_images[v_i];
+		res_str += " Result: ";
+
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 0);
+		string str_cr = plate.charsIdentify(src, false);
+		if ("" != str_cr)
+		{
+			res_str += str_cr;
+			res_str += "\r\n";
+		}
+		else
+		{
+			res_str += "No Answer\r\n";
+		}
+	}
+	m_res = res_str.c_str();
+	UpdateData(FALSE);
+
+	
+	CString filePath = this->m_savepath + "\\identify_others.txt";
+	std::ofstream resfile(filePath);
+	resfile << res_str.c_str();
+	resfile.close();
+
 }
