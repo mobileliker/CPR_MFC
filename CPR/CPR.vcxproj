@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BATCHDlg.h" />
+    <ClInclude Include="CharsIdentify.h" />
     <ClInclude Include="CharsSegment.h" />
     <ClInclude Include="CPR.h" />
     <ClInclude Include="CPRDlg.h" />
@@ -120,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BATCHDlg.cpp" />
+    <ClCompile Include="CharsIdentify.cpp" />
     <ClCompile Include="CharsSegment.cpp" />
     <ClCompile Include="CPR.cpp" />
     <ClCompile Include="CPRDlg.cpp" />

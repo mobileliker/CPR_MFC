@@ -13,6 +13,7 @@
 #include "PlateJudge.h"
 #include "PlateDetect.h"
 #include "CharsSegment.h"
+#include "CharsIdentify.h"
 
 #include "prep.h"
 
@@ -79,6 +80,7 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE, &CCPRDlg::OnBnClickedButtonJudge)
 	ON_BN_CLICKED(IDC_BUTTON_DETECT, &CCPRDlg::OnBnClickedButtonDetect)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT, &CCPRDlg::OnBnClickedButtonSegment)
+	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CCPRDlg::OnBnClickedButtonIdentify)
 END_MESSAGE_MAP()
 
 
@@ -327,9 +329,7 @@ UINT idss[][7] =
 
 void CCPRDlg::OnBnClickedButtonSegment()
 {
-	// TODO: 
-	
-	vector<vector<Mat>> vv_dst;
+	m_sgms.clear();
 	CCharsSegment plate;
 	plate.setDebug(1);
 
@@ -339,7 +339,7 @@ void CCPRDlg::OnBnClickedButtonSegment()
 		int result = plate.charsSegment(m_dtts[v_i], v_dst);
 		if(0 == result)
 		{
-			vv_dst.push_back(v_dst);
+			m_sgms.push_back(v_dst);
 			if(v_i < 6)
 			{
 				for(int i = 0; i < 7 && i < v_dst.size(); ++i)
@@ -350,5 +350,27 @@ void CCPRDlg::OnBnClickedButtonSegment()
 			}
 		}
 
+	}
+}
+
+UINT res_ids[] = {IDC_RES1, IDC_RES2, IDC_RES3, IDC_RES4, IDC_RES5, IDC_RES6};
+
+void CCPRDlg::OnBnClickedButtonIdentify()
+{
+	CCharsIdentify ci;
+
+	for(int i = 0; i < m_sgms.size(); ++i)
+	{
+		string plateIdentify = "";
+		for(int j = 0; j < m_sgms[i].size(); ++j)
+		{
+			bool isChinses = (0 == j) ? true : false;
+			string characater = ci.charsIdentify(m_sgms[i][j], isChinses);
+			plateIdentify += characater;
+		}
+		if(i < 6)
+		{
+			GetDlgItem(res_ids[i])->SetWindowTextA(plateIdentify.c_str());
+		}
 	}
 }

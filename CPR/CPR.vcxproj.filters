@@ -60,6 +60,9 @@
     <ClInclude Include="CharsSegment.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CharsIdentify.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPR.cpp">
@@ -87,6 +90,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CharsSegment.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CharsIdentify.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

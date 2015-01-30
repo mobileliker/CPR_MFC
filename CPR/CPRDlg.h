@@ -41,7 +41,9 @@ public:
 	std::vector<cv::Mat> m_locs;
 	std::vector<cv::Mat> m_jdgs;
 	std::vector<cv::Mat> m_dtts;
+	std::vector<std::vector<cv::Mat>> m_sgms;
 	afx_msg void OnBnClickedButtonJudge();
 	afx_msg void OnBnClickedButtonDetect();
 	afx_msg void OnBnClickedButtonSegment();
+	afx_msg void OnBnClickedButtonIdentify();
 };
