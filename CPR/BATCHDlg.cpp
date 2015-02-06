@@ -59,6 +59,9 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CBATCHDlg::OnBnClickedButtonRecognise)
 	ON_BN_CLICKED(IDC_BUTTON_IDENTIFYOTHERS, &CBATCHDlg::OnBnClickedButtonRecogniseothers)
 	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE, &CBATCHDlg::OnBnClickedButtonPlaterecognize)
+	ON_BN_CLICKED(IDC_BUTTON_BINARY, &CBATCHDlg::OnBnClickedButtonBinary)
+	ON_BN_CLICKED(IDC_BUTTON_LOCATION2, &CBATCHDlg::OnBnClickedButtonLocation2)
+	ON_BN_CLICKED(IDC_BUTTON_SEGMENT2, &CBATCHDlg::OnBnClickedButtonSegment2)
 END_MESSAGE_MAP()
 
 
@@ -168,6 +171,9 @@ void CBATCHDlg::OnBnClickedButtonLocation()
 	plate.setDebug(0);
 	plate.setGaussianBlurSize(5);
 	plate.setMorphSizeWidth(17);
+	plate.setMorphSizeHeight(10);
+	plate.setVerifyMin(8);
+	plate.setVerifyMax(80);
 
 
 	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
@@ -203,6 +209,8 @@ void CBATCHDlg::OnBnClickedButtonChannel1()
 		for (cv::Mat_<cv::Vec3b>::iterator it= src.begin<cv::Vec3b>() ; it!= src.end<cv::Vec3b>(); ++it) {  
 			int tmp = (abs((*it)[0] - (*it)[1]) + abs((*it)[0] - (*it)[2]));
 			if(tmp > 255) tmp = 255;
+			/*if((*it)[2] > 100) tmp = 0;
+			if(abs((*it)[2] - (*it)[1]) > 70) tmp = 0;*/
 			(*it)[0] = (*it)[1] = (*it)[2] = tmp;
 		}  
 
@@ -211,6 +219,8 @@ void CBATCHDlg::OnBnClickedButtonChannel1()
 		imwrite(ss.str(), src);
 
 	}
+
+	MessageBox("Finish");
 }
 
 
@@ -440,4 +450,86 @@ void CBATCHDlg::OnBnClickedButtonPlaterecognize()
 	std::ofstream resfile(filePath);
 	resfile << res_str.c_str();
 	resfile.close();
+}
+
+
+void CBATCHDlg::OnBnClickedButtonBinary()
+{
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 0);
+
+		Mat img_threshold;
+		//threshold(src, img_threshold, 0, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
+		threshold(src, img_threshold, 100, 255, CV_THRESH_BINARY);
+
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << this->m_savepath << "\\" << v_i << "_binary" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+
+	}
+
+	MessageBox("Finish.");
+}
+
+
+void CBATCHDlg::OnBnClickedButtonLocation2()
+{
+
+	CPlateLocate plate;	plate.setDebug(1);
+	plate.setVerifyMax(500);
+	plate.setVerifyMin(75);
+	
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{			
+		string str = m_images[v_i].GetBuffer(0);
+
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+
+		vector<Mat> resultVec;
+		Mat src = imread(str, 1);
+		int result = plate.plateLocate2(src, resultVec);
+		if (result == 0)
+		{
+			int num = resultVec.size();
+			for (int j = 0; j < num; j++)
+			{
+				Mat resultMat = resultVec[j];
+				stringstream ss(stringstream::in | stringstream::out);
+				ss << this->m_savepath << "\\" << name << "_location" << j << ".jpg";
+				imwrite(ss.str(), resultMat);
+			}
+		}
+	}
+}
+
+
+void CBATCHDlg::OnBnClickedButtonSegment2()
+{
+	_mkdir(m_savepath + "\\chinese");
+	_mkdir(m_savepath + "\\others");
+
+	CCharsSegment plate;
+
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+		Mat src = imread(str, 1);
+		int result = plate.charsSegment2(src, resultVec);
+		if (0 == result)
+		{
+			for (int j = 0; j < resultVec.size(); j++)
+			{
+				Mat resultMat = resultVec[j];
+				stringstream ss(stringstream::in | stringstream::out);
+				if(0 == j)	ss << m_savepath << "\\chinese\\" << v_i << "_segment" << j << ".jpg";
+				else ss << m_savepath << "\\others\\" << v_i << "_segment" << j << ".jpg";
+				imwrite(ss.str(), resultMat);
+			}
+		}
+	}
 }

@@ -161,9 +161,12 @@ int CPlateLocate::plateLocate(Mat src, vector<Mat>& resultVec)
 		ss << "tmp/debug_threshold" << ".jpg";
 		imwrite(ss.str(), img_threshold);
 	}
-
+	
 	Mat element = getStructuringElement(MORPH_RECT, Size(m_MorphSizeWidth, m_MorphSizeHeight) );
 	morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
+
+	//Mat element = getStructuringElement(MORPH_RECT, Size(m_MorphSizeWidth, m_MorphSizeHeight) );
+	//morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
 	
 	if(m_debug)
 	{ 

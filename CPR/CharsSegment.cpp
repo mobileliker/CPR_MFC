@@ -394,3 +394,54 @@ int CCharsSegment::RebuildRect(const vector<Rect>& vecRect, vector<Rect>& outRec
 	return 0;
 }
 
+
+int CCharsSegment::charsSegment2(Mat input, vector<Mat>& resultVec)
+{	
+	if( !input.data )
+	{ return -1; }
+
+	//判断车牌颜色以此确认threshold方法
+	int plateType = getPlateType(input);
+	cvtColor(input, input, CV_RGB2GRAY);
+
+	if(m_debug)
+	{ 
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_gray_" << ".jpg";
+		imwrite(ss.str(), input);
+	}
+
+	//Threshold input image
+	Mat img_threshold;
+	/*if (1 == plateType)
+	{
+		threshold(input, img_threshold, 10, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
+	} 
+	else 
+	{
+		threshold(input, img_threshold, 10, 255, CV_THRESH_OTSU+CV_THRESH_BINARY_INV);
+	}*/
+	threshold(input, img_threshold, 10, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
+
+	if(m_debug)
+	{ 
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_threshold_" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+	}
+	int num = 7;
+	int idx_xs[] = {13, 70, 151, 208, 265, 322, 379};
+	int char_width = 45;
+	int char_high = 90;
+	int idx_y = 25;
+
+	for(int i = 0; i < num; ++i)
+	{
+		Rect rect(idx_xs[i], idx_y, char_width, char_high);
+		Mat res;
+		img_threshold(rect).copyTo(res);
+		resultVec.push_back(res);
+	}
+
+	return 0;
+}

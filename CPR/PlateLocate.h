@@ -23,12 +23,14 @@ public:
 
 	//! 车牌定位
 	int plateLocate(Mat, vector<Mat>& );
+	int plateLocate2(Mat, vector<Mat>&);
 
 	//! 车牌的尺寸验证
 	bool verifySizes(RotatedRect mr);
 
 	//! 结果车牌显示
 	Mat showResultMat(Mat src, Size rect_size, Point2f center, int index);
+	Mat showResultMat2(Mat src, Size rect_size, Point2f center, int index);
 
 	//! 设置与读取变量
 	inline void setGaussianBlurSize(int param){ m_GaussianBlurSize = param;}

@@ -38,4 +38,7 @@ public:
 	afx_msg void OnBnClickedButtonRecognise();
 	afx_msg void OnBnClickedButtonRecogniseothers();
 	afx_msg void OnBnClickedButtonPlaterecognize();
+	afx_msg void OnBnClickedButtonBinary();
+	afx_msg void OnBnClickedButtonLocation2();
+	afx_msg void OnBnClickedButtonSegment2();
 };

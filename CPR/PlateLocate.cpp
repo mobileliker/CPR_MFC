@@ -82,6 +82,32 @@ Mat CPlateLocate::showResultMat(Mat src, Size rect_size, Point2f center, int ind
 
 	return resultResized;
 }
+Mat CPlateLocate::showResultMat2(Mat src, Size rect_size, Point2f center, int index)
+{
+	Mat img_crop;
+	getRectSubPix(src, rect_size, center, img_crop);
+
+	if(m_debug)
+	{ 
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_crop_" << index << ".jpg";
+		imwrite(ss.str(), img_crop);
+	}
+
+	Mat resultResized;
+	resultResized.create(140, 440, TYPE);
+
+	resize(img_crop, resultResized, resultResized.size(), 0, 0, INTER_CUBIC);
+
+	if(m_debug)
+	{ 
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_resize_" << index << ".jpg";
+		imwrite(ss.str(), resultResized);
+	}
+
+	return resultResized;
+}
 
 //! 定位车牌图像
 //! src 原始图像
@@ -162,6 +188,11 @@ int CPlateLocate::plateLocate(Mat src, vector<Mat>& resultVec)
 	Mat element = getStructuringElement(MORPH_RECT, Size(m_MorphSizeWidth, m_MorphSizeHeight) );
 	morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
 	
+	/*Mat element1 = getStructuringElement(MORPH_RECT, Size(20, 10) );
+	dilate(img_threshold, img_threshold, element1);
+	Mat element2 = getStructuringElement(MORPH_RECT, Size(20, 10) );
+	erode(img_threshold, img_threshold, element2);*/
+	
 	if(m_debug)
 	{ 
 		stringstream ss(stringstream::in | stringstream::out);
@@ -217,6 +248,23 @@ int CPlateLocate::plateLocate(Mat src, vector<Mat>& resultVec)
 		}
 	}
 
+	Mat result2;
+	if(m_debug)
+	{ 
+		//// Draw blue contours on a white image
+		src.copyTo(result2);
+		for(int i = 0; i < rects.size(); ++i)
+		{
+			Rect brect = rects[i].boundingRect();
+			rectangle(result2, brect, Scalar(128), 2);
+		}
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_Contours2" << ".jpg";
+		imwrite(ss.str(), result2);
+	}
+
+
+
 	int k = 1;
 	for(int i=0; i< rects.size(); i++)
 	{
@@ -255,6 +303,188 @@ int CPlateLocate::plateLocate(Mat src, vector<Mat>& resultVec)
 
 				Mat resultMat;
 				resultMat = showResultMat(img_rotated, rect_size, minRect.center, k++);
+
+				resultVec.push_back(resultMat);
+			}
+		}
+	}
+
+	if(m_debug)
+	{ 
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_result" << ".jpg";
+		imwrite(ss.str(), result);
+	}
+	
+
+	return 0;
+}
+
+int CPlateLocate::plateLocate2(Mat src, vector<Mat>& resultVec)
+{
+	Mat	src_channel;
+	src.copyTo(src_channel);
+
+	for (cv::Mat_<cv::Vec3b>::iterator it= src_channel.begin<cv::Vec3b>() ; it!= src_channel.end<cv::Vec3b>(); ++it) {  
+		int tmp = (int)(((*it)[0] - (*it)[1]) * 1.5 + ((*it)[0] - (*it)[2]) * 0.5);
+		if(tmp > 255) tmp = 255;
+		if(tmp < 0) tmp = 0;
+		(*it)[0] = (*it)[1] = (*it)[2] = tmp;
+	}
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_channel" << ".jpg";
+		imwrite(ss.str(), src_channel);
+	}
+
+	Mat src_gray;
+
+	//Convert it to gray
+	cvtColor(src_channel, src_gray, CV_RGB2GRAY );
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_gray" << ".jpg";
+		imwrite(ss.str(), src_gray);
+	}
+
+	/*Mat src_equal;
+	equalizeHist(src_gray,src_equal); 
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_equal" << ".jpg";
+		imwrite(ss.str(), src_equal);
+	}*/
+
+	Mat img_threshold;
+
+	threshold(src_gray, img_threshold, 90, 255, CV_THRESH_BINARY);
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_threshold" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+	}
+
+	Mat element = getStructuringElement(MORPH_RECT, Size(m_MorphSizeWidth, m_MorphSizeHeight) );
+	morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_morphology" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+	}
+	
+	//Find 轮廓 of possibles plates
+	vector< vector< Point> > contours;
+	findContours(img_threshold,
+		contours, // a vector of contours
+		CV_RETR_EXTERNAL, // 提取外部轮廓
+		CV_CHAIN_APPROX_NONE); // all pixels of each contours
+
+
+	
+	Mat result;
+	if(m_debug)
+	{ 
+		//// Draw blue contours on a white image
+		src.copyTo(result);
+		drawContours(result, contours,
+			-1, // draw all contours
+			Scalar(0,0,255), // in blue
+			1); // with a thickness of 1
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_Contours" << ".jpg";
+		imwrite(ss.str(), result);
+	}
+
+	
+
+	//Start to iterate to each contour founded
+	vector<vector<Point> >::iterator itc = contours.begin();
+	
+	vector<RotatedRect> rects;
+	//Remove patch that are no inside limits of aspect ratio and area.
+	int t = 0;
+	while (itc != contours.end())
+	{
+		//Create bounding rect of object
+		RotatedRect mr = minAreaRect(Mat(*itc));
+
+		//large the rect for more
+		if( !verifySizes(mr))
+		{
+			itc = contours.erase(itc);
+		}
+		else
+		{
+			++itc;
+			rects.push_back(mr);
+		}
+	}
+
+	Mat result2;
+	if(m_debug)
+	{ 
+		//// Draw blue contours on a white image
+		src.copyTo(result2);
+		for(int i = 0; i < rects.size(); ++i)
+		{
+			Rect brect = rects[i].boundingRect();
+			rectangle(result2, brect, Scalar(128), 2);
+		}
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_Contours2" << ".jpg";
+		imwrite(ss.str(), result2);
+	}
+
+
+
+	int k = 1;
+	for(int i=0; i< rects.size(); i++)
+	{
+		RotatedRect minRect = rects[i];
+		if(verifySizes(minRect))
+		{	
+			// rotated rectangle drawing 
+			// Get rotation matrix
+			// 旋转这部分代码确实可以将某些倾斜的车牌调整正，
+			// 但是它也会误将更多正的车牌搞成倾斜！所以综合考虑，还是不使用这段代码。
+			// 2014-08-14,由于新到的一批图片中发现有很多车牌是倾斜的，因此决定再次尝试
+			// 这段代码。
+			if(m_debug)
+			{ 
+				Point2f rect_points[4]; 
+				minRect.points( rect_points );
+				for( int j = 0; j < 4; j++ )
+					line( result, rect_points[j], rect_points[(j+1)%4], Scalar(0,255,255), 1, 8 );
+			}
+
+			float r = (float)minRect.size.width / (float)minRect.size.height;
+			float angle = minRect.angle;
+			Size rect_size = minRect.size;
+			if (r < 1)
+			{
+				angle = 90 + angle;
+				swap(rect_size.width, rect_size.height);
+			}
+			//如果抓取的方块旋转超过m_angle角度，则不是车牌，放弃处理
+			if (angle - m_angle < 0 && angle + m_angle > 0)
+			{
+				//Create and rotate image
+				Mat rotmat = getRotationMatrix2D(minRect.center, angle, 1);
+				Mat img_rotated;
+				warpAffine(src, img_rotated, rotmat, src.size(), CV_INTER_CUBIC);
+
+				Mat resultMat;
+				resultMat = showResultMat2(img_rotated, rect_size, minRect.center, k++);
 
 				resultVec.push_back(resultMat);
 			}

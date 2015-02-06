@@ -26,6 +26,7 @@ public:
 
 	//! ×Ö·û·Ö¸î
 	int charsSegment(Mat, vector<Mat>& );
+	int charsSegment2(Mat, vector<Mat>&);
 
 	//! ×Ö·û³ß´çÑéÖ¤
 	bool verifySizes(Mat r);

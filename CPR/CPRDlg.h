@@ -49,4 +49,10 @@ public:
 	afx_msg void OnBnClickedButtonIdentify();
 	afx_msg void OnBnClickedButtonRecognise();
 	afx_msg void OnBnClickedButtonPlaterecognize();
+	afx_msg void OnBnClickedButtonChannel1();
+	afx_msg void OnBnClickedButtonBinary();
+	cv::Mat m_channel;
+	afx_msg void OnBnClickedButtonLocation2();
+	afx_msg void OnBnClickedButtonSegment2();
+	afx_msg void OnBnClickedButtonJudge2();
 };

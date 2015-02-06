@@ -85,6 +85,11 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_IDENTIFY, &CCPRDlg::OnBnClickedButtonIdentify)
 	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE, &CCPRDlg::OnBnClickedButtonRecognise)
 	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE, &CCPRDlg::OnBnClickedButtonPlaterecognize)
+	ON_BN_CLICKED(IDC_BUTTON_CHANNEL1, &CCPRDlg::OnBnClickedButtonChannel1)
+	ON_BN_CLICKED(IDC_BUTTON_BINARY, &CCPRDlg::OnBnClickedButtonBinary)
+	ON_BN_CLICKED(IDC_BUTTON_LOCATION2, &CCPRDlg::OnBnClickedButtonLocation2)
+	ON_BN_CLICKED(IDC_BUTTON_SEGMENT2, &CCPRDlg::OnBnClickedButtonSegment2)
+	ON_BN_CLICKED(IDC_BUTTON_JUDGE2, &CCPRDlg::OnBnClickedButtonJudge2)
 END_MESSAGE_MAP()
 
 
@@ -255,7 +260,11 @@ void CCPRDlg::OnBnClickedButtonLocation()
 	CPlateLocate plate;
 	plate.setDebug(1);
 	plate.setGaussianBlurSize(5);
+	//plate.setMorphSizeWidth(17);
 	plate.setMorphSizeWidth(17);
+	plate.setMorphSizeHeight(10);
+	plate.setVerifyMin(8);
+	plate.setVerifyMax(80);
 
 	int result = plate.plateLocate(m_src, m_locs);
 	if (0 == result)
@@ -337,10 +346,11 @@ void CCPRDlg::OnBnClickedButtonSegment()
 	CCharsSegment plate;
 	plate.setDebug(1);
 
-	for(vector<Mat>::size_type v_i = 0; v_i != m_dtts.size(); ++v_i)
+	
+	for(vector<Mat>::size_type v_i = 0; v_i != m_jdgs.size(); ++v_i)
 	{
 		vector<Mat> v_dst;
-		int result = plate.charsSegment(m_dtts[v_i], v_dst);
+		int result = plate.charsSegment(m_jdgs[v_i], v_dst);
 		if(0 == result)
 		{
 			m_sgms.push_back(v_dst);
@@ -442,6 +452,115 @@ void CCPRDlg::OnBnClickedButtonPlaterecognize()
 				GetDlgItem(res_ids[j])->SetWindowTextA(plateVec[j].c_str());
 			}
 		}
+	}
+
+}
+
+
+void CCPRDlg::OnBnClickedButtonChannel1()
+{
+
+	m_channel;
+	m_src.copyTo(m_channel);
+
+	for (cv::Mat_<cv::Vec3b>::iterator it= m_channel.begin<cv::Vec3b>() ; it!= m_channel.end<cv::Vec3b>(); ++it) {  
+		int tmp = (int)(((*it)[0] - (*it)[1]) * 1.5 + ((*it)[0] - (*it)[2]) * 0.5);
+		if(tmp > 255) tmp = 255;
+		if(tmp < 0) tmp = 0;
+		(*it)[0] = (*it)[1] = (*it)[2] = tmp;
+	}
+	
+	IplImage pImg = m_channel;
+	DrawPicToHDC(&pImg, IDC_ORIGINALIMAGE);
+
+}
+
+
+void CCPRDlg::OnBnClickedButtonBinary()
+{
+	Mat src_gray;
+
+	//Convert it to gray
+	cvtColor(this->m_channel, src_gray, CV_RGB2GRAY );
+
+	Mat img_threshold;
+	//threshold(m_channel, img_threshold, 0, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
+	//threshold(src_gray, img_threshold, 0, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
+	threshold(src_gray, img_threshold, 90, 255, CV_THRESH_BINARY);
+	
+	IplImage pImg = img_threshold;
+	DrawPicToHDC(&pImg, IDC_ORIGINALIMAGE);
+}
+
+
+void CCPRDlg::OnBnClickedButtonLocation2()
+{
+	m_locs.clear();
+	CPlateLocate plate;
+	plate.setDebug(1);
+	plate.setVerifyMax(500);
+	plate.setVerifyMin(75);
+
+	int result = plate.plateLocate2(m_src, m_locs);
+	
+	if (0 == result)
+	{
+		for (int j = 0; j < m_locs.size() && j < 6; j++)
+		{
+			Mat resultMat = m_locs[j];
+			IplImage pImg = resultMat;
+			DrawPicToHDC(&pImg, ids[j]);
+		}
+	}
+}
+
+
+void CCPRDlg::OnBnClickedButtonSegment2()
+{
+	m_sgms.clear();
+	CCharsSegment plate;
+	plate.setDebug(1);
+
+	
+	for(vector<Mat>::size_type v_i = 0; v_i != m_jdgs.size(); ++v_i)
+	{
+		vector<Mat> v_dst;
+		int result = plate.charsSegment2(m_jdgs[v_i], v_dst);
+		if(0 == result)
+		{
+			m_sgms.push_back(v_dst);
+			if(v_i < 6)
+			{
+				for(int i = 0; i < 7 && i < v_dst.size(); ++i)
+				{
+					IplImage pImg = v_dst[i];
+					DrawPicToHDC(&pImg, idss[v_i][i]);
+				}
+			}
+		}
+
+	}
+}
+
+
+void CCPRDlg::OnBnClickedButtonJudge2()
+{
+	m_jdgs.clear();
+
+	for(int i = 0; i < m_locs.size(); ++i)
+	{
+		Mat tmp;
+		m_locs[i].copyTo(tmp);
+		m_jdgs.push_back(tmp);
+	}
+	
+	ResetDisImg();
+
+	for (int j = 0; j < m_jdgs.size() && j < 6; j++)
+	{
+		Mat resultMat = m_jdgs[j];
+		IplImage pImg = resultMat;
+		DrawPicToHDC(&pImg, ids[j]);
 	}
 
 }
