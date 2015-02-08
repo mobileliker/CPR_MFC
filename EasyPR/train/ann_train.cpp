@@ -40,7 +40,7 @@ const string strChinese[] = {"zh_cuan" /* ´¨ */, "zh_e" /* ¶õ */,  "zh_gan" /* ¸
 const int numChinese = 20;
 const int numAll = 54; /* 34+20=54 */
 
-const int numNeurons = 20;
+//const int numNeurons = 20;
 const int predictSize = 10;
 
 //create the accumulation histograms,img is a binary image, t is Ë®Æ½»ò´¹Ö±

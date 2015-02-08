@@ -55,4 +55,6 @@ public:
 	afx_msg void OnBnClickedButtonLocation2();
 	afx_msg void OnBnClickedButtonSegment2();
 	afx_msg void OnBnClickedButtonJudge2();
+	afx_msg void OnBnClickedButtonRecognise2();
+	afx_msg void OnBnClickedButtonPlaterecognize2();
 };

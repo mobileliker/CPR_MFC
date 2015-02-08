@@ -90,6 +90,8 @@ BEGIN_MESSAGE_MAP(CCPRDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION2, &CCPRDlg::OnBnClickedButtonLocation2)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT2, &CCPRDlg::OnBnClickedButtonSegment2)
 	ON_BN_CLICKED(IDC_BUTTON_JUDGE2, &CCPRDlg::OnBnClickedButtonJudge2)
+	ON_BN_CLICKED(IDC_BUTTON_RECOGNISE2, &CCPRDlg::OnBnClickedButtonRecognise2)
+	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE2, &CCPRDlg::OnBnClickedButtonPlaterecognize2)
 END_MESSAGE_MAP()
 
 
@@ -464,7 +466,7 @@ void CCPRDlg::OnBnClickedButtonChannel1()
 	m_src.copyTo(m_channel);
 
 	for (cv::Mat_<cv::Vec3b>::iterator it= m_channel.begin<cv::Vec3b>() ; it!= m_channel.end<cv::Vec3b>(); ++it) {  
-		int tmp = (int)(((*it)[0] - (*it)[1]) * 1.5 + ((*it)[0] - (*it)[2]) * 0.5);
+		int tmp = (int)(((*it)[0] - (*it)[2]) * 2 + ((*it)[1] - (*it)[2]));
 		if(tmp > 255) tmp = 255;
 		if(tmp < 0) tmp = 0;
 		(*it)[0] = (*it)[1] = (*it)[2] = tmp;
@@ -498,8 +500,8 @@ void CCPRDlg::OnBnClickedButtonLocation2()
 	m_locs.clear();
 	CPlateLocate plate;
 	plate.setDebug(1);
-	plate.setVerifyMax(500);
-	plate.setVerifyMin(75);
+	//plate.setVerifyMax(500);
+	//plate.setVerifyMin(50);
 
 	int result = plate.plateLocate2(m_src, m_locs);
 	
@@ -522,10 +524,10 @@ void CCPRDlg::OnBnClickedButtonSegment2()
 	plate.setDebug(1);
 
 	
-	for(vector<Mat>::size_type v_i = 0; v_i != m_jdgs.size(); ++v_i)
+	for(vector<Mat>::size_type v_i = 0; v_i != m_locs.size(); ++v_i)
 	{
 		vector<Mat> v_dst;
-		int result = plate.charsSegment2(m_jdgs[v_i], v_dst);
+		int result = plate.charsSegment2(m_locs[v_i], v_dst);
 		if(0 == result)
 		{
 			m_sgms.push_back(v_dst);
@@ -561,6 +563,63 @@ void CCPRDlg::OnBnClickedButtonJudge2()
 		Mat resultMat = m_jdgs[j];
 		IplImage pImg = resultMat;
 		DrawPicToHDC(&pImg, ids[j]);
+	}
+	
+}
+
+
+void CCPRDlg::OnBnClickedButtonRecognise2()
+{
+	ResetResStr();
+
+	CCharsRecognise cr;
+	string charsRecognise = "";
+
+	for(int i = 0; i < m_locs.size(); ++i)
+	{
+		int result = cr.charsRecognise2(m_locs[i], charsRecognise);
+		if (0 == result)
+		{
+			//MessageBox(charsRecognise.c_str());		
+			if(i < 6)
+			{
+				GetDlgItem(res_ids[i])->SetWindowTextA(charsRecognise.c_str());
+			}
+		}
+	}
+}
+
+
+void CCPRDlg::OnBnClickedButtonPlaterecognize2()
+{
+	ResetResStr();
+
+	CPlateRecognize pr;
+	pr.LoadANN("model/ann.xml");
+	pr.LoadSVM("model/svm.xml");
+
+	pr.setGaussianBlurSize(5);
+	//pr.setMorphSizeWidth(17);
+
+	//pr.setVerifyMin(3);
+	//pr.setVerifyMax(20);
+
+	//pr.setLiuDingSize(7);
+	pr.setColorThreshold(150);
+
+	vector<string> plateVec;
+
+	int result = pr.plateRecognize2(m_src, plateVec);
+	if (result == 0)
+	{
+		int num = plateVec.size();
+		for (int j = 0; j < num; j++)
+		{
+			if(j < 6)
+			{
+				GetDlgItem(res_ids[j])->SetWindowTextA(plateVec[j].c_str());
+			}
+		}
 	}
 
 }

@@ -20,6 +20,8 @@ CPlateLocate::CPlateLocate()
 	m_angle = DEFAULT_ANGLE;
 
 	m_debug = DEFAULT_DEBUG;
+
+	m_threshold_value = DEFAULT_THRESHOLD_VALUE;
 }
 
 //! 对minAreaRect获得的最小外接矩形，用纵横比进行判断
@@ -326,7 +328,7 @@ int CPlateLocate::plateLocate2(Mat src, vector<Mat>& resultVec)
 	src.copyTo(src_channel);
 
 	for (cv::Mat_<cv::Vec3b>::iterator it= src_channel.begin<cv::Vec3b>() ; it!= src_channel.end<cv::Vec3b>(); ++it) {  
-		int tmp = (int)(((*it)[0] - (*it)[1]) * 1.5 + ((*it)[0] - (*it)[2]) * 0.5);
+		int tmp = (int)(((*it)[0] - (*it)[2]) * 2 + ((*it)[1] - (*it)[2]));
 		if(tmp > 255) tmp = 255;
 		if(tmp < 0) tmp = 0;
 		(*it)[0] = (*it)[1] = (*it)[2] = tmp;
@@ -363,7 +365,7 @@ int CPlateLocate::plateLocate2(Mat src, vector<Mat>& resultVec)
 
 	Mat img_threshold;
 
-	threshold(src_gray, img_threshold, 90, 255, CV_THRESH_BINARY);
+	threshold(src_gray, img_threshold, m_threshold_value, 255, CV_THRESH_BINARY);
 
 	if(m_debug)
 	{
@@ -374,13 +376,34 @@ int CPlateLocate::plateLocate2(Mat src, vector<Mat>& resultVec)
 
 	Mat element = getStructuringElement(MORPH_RECT, Size(m_MorphSizeWidth, m_MorphSizeHeight) );
 	morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
-
+	
 	if(m_debug)
 	{
 		stringstream ss(stringstream::in | stringstream::out);
 		ss << "tmp/debug_morphology" << ".jpg";
 		imwrite(ss.str(), img_threshold);
 	}
+	
+
+	/*Mat element1 = getStructuringElement(MORPH_RECT, Size(34, 6) );
+	dilate(img_threshold, img_threshold, element1);
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_dilate" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+	}
+
+	Mat element2 = getStructuringElement(MORPH_RECT, Size(17, 3) );
+	erode(img_threshold, img_threshold, element2);
+
+	if(m_debug)
+	{
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << "tmp/debug_erode" << ".jpg";
+		imwrite(ss.str(), img_threshold);
+	}*/
 	
 	//Find 轮廓 of possibles plates
 	vector< vector< Point> > contours;
@@ -485,6 +508,7 @@ int CPlateLocate::plateLocate2(Mat src, vector<Mat>& resultVec)
 
 				Mat resultMat;
 				resultMat = showResultMat2(img_rotated, rect_size, minRect.center, k++);
+				//resultMat = showResultMat(img_rotated, rect_size, minRect.center, k++);
 
 				resultVec.push_back(resultMat);
 			}

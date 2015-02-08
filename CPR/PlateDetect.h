@@ -25,6 +25,7 @@ public:
 
 	//! 车牌检测：车牌定位与判断
 	int plateDetect(Mat, vector<Mat>&);
+	int plateDetect2(Mat, vector<Mat>&);
 
 	//! 装载SVM模型
 	void LoadSVM(string s);

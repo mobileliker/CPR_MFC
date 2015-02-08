@@ -52,6 +52,9 @@
     <ClCompile Include="src\cpp\plate_recognize.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="train\ann_train.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\prep.h">

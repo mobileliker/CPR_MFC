@@ -30,3 +30,14 @@ int CPlateDetect::plateDetect(Mat src, vector<Mat>& resultVec)
 
 	return 0;
 }
+
+
+int CPlateDetect::plateDetect2(Mat src, vector<Mat>& resultVec)
+{
+	//可能是车牌的图块集合
+	vector<Mat> matVec;
+
+	int resultLo = m_plateLocate->plateLocate2(src, resultVec);
+
+	return resultLo;
+}

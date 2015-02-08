@@ -429,6 +429,7 @@ int CCharsSegment::charsSegment2(Mat input, vector<Mat>& resultVec)
 		ss << "tmp/debug_threshold_" << ".jpg";
 		imwrite(ss.str(), img_threshold);
 	}
+
 	int num = 7;
 	int idx_xs[] = {13, 70, 151, 208, 265, 322, 379};
 	int char_width = 45;
@@ -440,7 +441,20 @@ int CCharsSegment::charsSegment2(Mat input, vector<Mat>& resultVec)
 		Rect rect(idx_xs[i], idx_y, char_width, char_high);
 		Mat res;
 		img_threshold(rect).copyTo(res);
-		resultVec.push_back(res);
+
+		Mat res_resize;
+		res_resize.create(20, 20, 16);
+
+		resize(res, res_resize, res_resize.size(), 0, 0, INTER_CUBIC);
+
+		resultVec.push_back(res_resize);
+
+		if(m_debug)
+		{ 
+			stringstream ss(stringstream::in | stringstream::out);
+			ss << "tmp/debug_segment_" << i << ".jpg";
+			imwrite(ss.str(), res_resize);
+		}
 	}
 
 	return 0;

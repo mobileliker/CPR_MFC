@@ -41,4 +41,6 @@ public:
 	afx_msg void OnBnClickedButtonBinary();
 	afx_msg void OnBnClickedButtonLocation2();
 	afx_msg void OnBnClickedButtonSegment2();
+	afx_msg void OnBnClickedButtonResize();
+	afx_msg void OnBnClickedButtonPlaterecognize2();
 };

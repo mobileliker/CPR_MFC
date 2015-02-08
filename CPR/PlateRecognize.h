@@ -25,6 +25,7 @@ public:
 
 	//! 车牌检测与字符识别
 	int plateRecognize(Mat, vector<string>&);
+	int plateRecognize2(Mat, vector<string>&);
 
 	////! 车牌定位与判断
 	//int plateDetect(Mat, vector<Mat>&);

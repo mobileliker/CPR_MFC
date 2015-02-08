@@ -65,3 +65,33 @@ int CPlateRecognize::plateRecognize(Mat src, vector<string>& licenseVec)
 	return resultPD;
 }
 
+
+int CPlateRecognize::plateRecognize2(Mat src, vector<string>& licenseVec)
+{
+	//车牌方块集合
+	vector<Mat> plateVec;
+
+	int resultPD = plateDetect2(src, plateVec);
+	if (resultPD == 0)
+	{
+		int num = plateVec.size();
+		for (int j = 0; j < num; j++)
+		{
+			Mat plate = plateVec[j];
+			
+			//获取车牌颜色
+			string plateType = getPlateType(plate);
+
+			//获取车牌号
+			string plateIdentify = "";
+			int resultCR = charsRecognise2(plate, plateIdentify);
+			if (resultCR == 0)
+			{
+				//string license = plateType + ":" + plateIdentify;
+				licenseVec.push_back(plateIdentify);
+			}
+		}
+	}
+
+	return resultPD;
+}

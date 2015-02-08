@@ -91,6 +91,7 @@
     <ClCompile Include="src\cpp\plate_locate.cpp" />
     <ClCompile Include="src\cpp\plate_recognize.cpp" />
     <ClCompile Include="src\cpp\test.cpp" />
+    <ClCompile Include="train\ann_train.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\chars_identify.h" />

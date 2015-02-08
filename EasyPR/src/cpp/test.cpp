@@ -21,7 +21,7 @@ int test_chars_recognise();
 int test_plate_recognize();
 
 
-int main()
+/*int main()
 {
 	//assert (test_plate_locate() == 0);
 	//assert (test_plate_judge() == 0);
@@ -34,7 +34,7 @@ int main()
 	assert (test_plate_recognize() == 0);
 
 	return 0;
-}
+}*/
 
 int test_plate_locate()
 {

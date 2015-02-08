@@ -54,6 +54,8 @@ public:
 
 	inline void setDebug(int param){ m_debug = param;}
 
+	inline void setThresholdValue(int param) { m_threshold_value = param;}
+
 	//! PlateLocate所用常量
 	static const int DEFAULT_GAUSSIANBLUR_SIZE = 5;
 	static const int SOBEL_SCALE = 1;
@@ -61,8 +63,11 @@ public:
 	static const int SOBEL_DDEPTH = CV_16S;
 	static const int SOBEL_X_WEIGHT = 1;
 	static const int SOBEL_Y_WEIGHT = 0 ;
-	static const int DEFAULT_MORPH_SIZE_WIDTH = 17;
+	//static const int DEFAULT_MORPH_SIZE_WIDTH = 17;
+	//static const int DEFAULT_MORPH_SIZE_HEIGHT = 3;
+	static const int DEFAULT_MORPH_SIZE_WIDTH = 20;
 	static const int DEFAULT_MORPH_SIZE_HEIGHT = 3;
+	static const int DEFAULT_THRESHOLD_VALUE = 85;
 
 	//! showResultMat所用常量
 	static const int WIDTH = 136;
@@ -70,8 +75,10 @@ public:
 	static const int TYPE = CV_8UC3;
 	
 	//! verifySize所用常量
-	static const int DEFAULT_VERIFY_MIN = 3;
-	static const int DEFAULT_VERIFY_MAX = 20;
+	//static const int DEFAULT_VERIFY_MIN = 3;
+	//static const int DEFAULT_VERIFY_MAX = 20;
+	static const int DEFAULT_VERIFY_MIN = 50;
+	static const int DEFAULT_VERIFY_MAX = 500;
 
 	//! 角度判断所用常量
 	static const int DEFAULT_ANGLE = 30;
@@ -82,6 +89,9 @@ public:
 protected:
 	//! 高斯模糊所用变量
 	int m_GaussianBlurSize;
+
+	//! 二值化使用的阈值
+	int m_threshold_value;
 
 	//! 连接操作所用变量
 	int m_MorphSizeWidth;

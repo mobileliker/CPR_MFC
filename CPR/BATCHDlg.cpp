@@ -17,6 +17,8 @@
 #include <fstream>
 #include <direct.h>
 
+#include <time.h>
+
 #include "prep.h"
 
 
@@ -62,6 +64,8 @@ BEGIN_MESSAGE_MAP(CBATCHDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_BINARY, &CBATCHDlg::OnBnClickedButtonBinary)
 	ON_BN_CLICKED(IDC_BUTTON_LOCATION2, &CBATCHDlg::OnBnClickedButtonLocation2)
 	ON_BN_CLICKED(IDC_BUTTON_SEGMENT2, &CBATCHDlg::OnBnClickedButtonSegment2)
+	ON_BN_CLICKED(IDC_BUTTON_Resize, &CBATCHDlg::OnBnClickedButtonResize)
+	ON_BN_CLICKED(IDC_BUTTON_PLATERECOGNIZE2, &CBATCHDlg::OnBnClickedButtonPlaterecognize2)
 END_MESSAGE_MAP()
 
 
@@ -313,6 +317,7 @@ void CBATCHDlg::OnBnClickedButtonIdentify()
 
 		string str = m_images[v_i].GetBuffer(0);
 		Mat src = imread(str, 0);
+			
 		string str_cr = plate.charsIdentify(src, true);
 		if ("" != str_cr)
 		{
@@ -339,6 +344,8 @@ void CBATCHDlg::OnBnClickedButtonRecognise()
 {	
 	CCharsRecognise plate;
 	string res_str = "";
+	
+	int num_char = 0;
 	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
 	{	
 		res_str += m_images[v_i];
@@ -346,6 +353,11 @@ void CBATCHDlg::OnBnClickedButtonRecognise()
 
 		vector<Mat> resultVec;
 		string str = m_images[v_i].GetBuffer(0);
+		
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+
 		Mat src = imread(str, 1);
 		string str_cr;
 		int result = plate.charsRecognise(src, str_cr);
@@ -353,12 +365,23 @@ void CBATCHDlg::OnBnClickedButtonRecognise()
 		{
 			res_str += str_cr;
 			res_str += "\r\n";
+			for(int j = 2; j < str_cr.size() && j < 8; ++j)
+			{
+				if(str_cr[j] == name[j]) ++num_char;
+			}
 		}
 		else
 		{
 			res_str += "No Answer\r\n";
 		}
 	}
+	res_str += "Char accuracy rate:";
+	char buffer[50];
+	sprintf(buffer,"%f\0",1.0 * num_char / (m_images.size() * 6));
+	res_str += buffer;
+	res_str += "\r\n";
+
+
 	m_res = res_str.c_str();
 	UpdateData(FALSE);
 
@@ -374,24 +397,43 @@ void CBATCHDlg::OnBnClickedButtonRecogniseothers()
 {		
 	CCharsIdentify plate;
 	string res_str = "";
+	
+	int num_char = 0;
 	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
 	{	
 		res_str += m_images[v_i];
 		res_str += " Result: ";
+		string str = m_images[v_i].GetBuffer(0);		
+		
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
 
-		string str = m_images[v_i].GetBuffer(0);
 		Mat src = imread(str, 0);
-		string str_cr = plate.charsIdentify(src, false);
+				
+		Mat src_resize;
+		src_resize.create(20, 20, 16);
+
+		resize(src, src_resize, src_resize.size(), 0, 0, INTER_CUBIC);
+
+		string str_cr = plate.charsIdentify(src_resize, false);
 		if ("" != str_cr)
 		{
 			res_str += str_cr;
 			res_str += "\r\n";
+			if(name[0] == str_cr[0]) ++num_char;
 		}
 		else
 		{
 			res_str += "No Answer\r\n";
 		}
 	}
+	res_str += "Char accuracy rate:";
+	char buffer[50];
+	sprintf(buffer,"%f\0",1.0 * num_char / m_images.size());
+	res_str += buffer;
+	res_str += "\r\n";
+
 	m_res = res_str.c_str();
 	UpdateData(FALSE);
 
@@ -420,6 +462,8 @@ void CBATCHDlg::OnBnClickedButtonPlaterecognize()
 	pr.setColorThreshold(150);
 
 	string res_str = "";
+	
+	int num_char = 0;
 	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
 	{	
 		vector<string> plateVec;
@@ -429,13 +473,27 @@ void CBATCHDlg::OnBnClickedButtonPlaterecognize()
 
 		vector<Mat> resultVec;
 		string str = m_images[v_i].GetBuffer(0);
+
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+
 		Mat src = imread(str, 1);
 		string str_cr;
 
 		int result = pr.plateRecognize(src, plateVec);
 		if (result == 0)
 		{
-			for(int i = 0; i < plateVec.size(); ++i) { res_str += " "; res_str += plateVec[i]; }
+
+			for(int i = 0; i < plateVec.size(); ++i) 
+			{ 
+				res_str += " ";
+				res_str += plateVec[i]; 
+				for(int j = 2; j < plateVec[i].size() && j < 8; ++j)
+				{
+					if(plateVec[i][j] == name[j]) ++num_char;
+				}
+			}
 			res_str += "\r\n";
 		}
 		else
@@ -443,6 +501,10 @@ void CBATCHDlg::OnBnClickedButtonPlaterecognize()
 			res_str += "No Answer\r\n";
 		}
 	}
+	res_str += "Char accuracy rate:";
+	res_str += (1.0 * num_char / (m_images.size() * 6));
+	res_str += "\r\n";
+
 	m_res = res_str.c_str();
 	UpdateData(FALSE);
 
@@ -478,8 +540,8 @@ void CBATCHDlg::OnBnClickedButtonLocation2()
 {
 
 	CPlateLocate plate;	plate.setDebug(1);
-	plate.setVerifyMax(500);
-	plate.setVerifyMin(75);
+	//plate.setVerifyMax(500);
+	//plate.setVerifyMin(50);
 	
 	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
 	{			
@@ -495,22 +557,83 @@ void CBATCHDlg::OnBnClickedButtonLocation2()
 		if (result == 0)
 		{
 			int num = resultVec.size();
-			for (int j = 0; j < num; j++)
+			if(1 == num)
 			{
-				Mat resultMat = resultVec[j];
+				Mat resultMat = resultVec[0];
 				stringstream ss(stringstream::in | stringstream::out);
-				ss << this->m_savepath << "\\" << name << "_location" << j << ".jpg";
+				ss << this->m_savepath << "\\" << name << ".jpg";
 				imwrite(ss.str(), resultMat);
 			}
+			else
+			{
+				for (int j = 0; j < num; j++)
+				{
+					Mat resultMat = resultVec[j];
+					stringstream ss(stringstream::in | stringstream::out);
+					ss << this->m_savepath << "\\" << name << "_" << j << ".jpg";
+					imwrite(ss.str(), resultMat);
+				}
+			}
+
 		}
 	}
+	
+	MessageBox("Finish.");
 }
 
 
 void CBATCHDlg::OnBnClickedButtonSegment2()
 {
-	_mkdir(m_savepath + "\\chinese");
-	_mkdir(m_savepath + "\\others");
+	string str_idx_sf[] = 
+	{ "¼½","Ô¥","ÔÆ","ÁÉ","ºÚ",
+		"Ïæ","Íî","Â³","ÐÂ","ËÕ","Õã","¸Ó","¶õ",
+		"¹ð","¸Ê","½ú","ÃÉ","ÉÂ","¼ª","Ãö",
+		"¹ó","ÔÁ","Çà","²Ø","´¨","Äþ","Çí",
+		"Óå","¾©","½ò","»¦"};
+
+	string str_sf[] = {
+		"zh_ji", /*¼½*/
+		"zh_yu", /*Ô¥*/
+		"zh_yun",/*ÔÆ*/
+		"zh_liao",/*ÁÉ*/
+		"zh_hei",/*ºÚ*/
+		"zh_xiang",/*Ïæ*/
+		"zh_wan",/*Íî*/
+		"zh_lu",/*Â³*/
+		"zh_xin",/*ÐÂ*/
+		"zh_su",/*ËÕ*/
+		"zh_zhe",/*Õã*/
+		"zh_gan",/*¸Ó*/
+		"zh_e",/*¶õ*/
+		"zh_gui",/*¹ð*/
+		"zh_gan2",/*¸Ê*/
+		"zh_sx",/*½ú*/
+		"zh_meng",/*ÃÉ*/
+		"zh_shan",/*ÉÂ*/
+		"zh_jl",/*¼ª*/
+		"zh_min",/*Ãö*/
+		"zh_gui2",/*¹ó*/
+		"zh_yue",/*ÔÁ*/
+		"zh_qing",/*Çà*/
+		"zh_zan",/*²Ø*/
+		"zh_cuan",/*´¨*/
+		"zh_ning",/*Äþ*/
+		"zh_qiong",/*Çí*/
+		"zh_yu2",/*Óå*/
+		"zh_jing",/*¾©*/
+		"zh_jin",/*½ò*/
+		"zh_hu"/*»¦*/
+		};
+
+	_mkdir(m_savepath + "\\charsChinese");
+	_mkdir(m_savepath + "\\chars2");
+	_mkdir(m_savepath + "\\allchars");
+	_mkdir(m_savepath + "\\allchinese");
+
+	int i;
+	for(i = 0; i < 10; ++i) _mkdir(m_savepath + "\\chars2\\" + (char)(i + '0'));
+	for(i = (int)'A'; i <= (int)'Z'; ++i) _mkdir(m_savepath + "\\chars2\\" + (char)i);
+	for(i = 0; i < 31; ++i) _mkdir(m_savepath + "\\charsChinese\\" + str_sf[i].c_str());
 
 	CCharsSegment plate;
 
@@ -518,18 +641,150 @@ void CBATCHDlg::OnBnClickedButtonSegment2()
 	{	
 		vector<Mat> resultVec;
 		string str = m_images[v_i].GetBuffer(0);
+
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+		CString cstr = str.c_str();
+
 		Mat src = imread(str, 1);
 		int result = plate.charsSegment2(src, resultVec);
 		if (0 == result)
 		{
 			for (int j = 0; j < resultVec.size(); j++)
 			{
+				time_t rawtime;
+				time ( &rawtime );
 				Mat resultMat = resultVec[j];
 				stringstream ss(stringstream::in | stringstream::out);
-				if(0 == j)	ss << m_savepath << "\\chinese\\" << v_i << "_segment" << j << ".jpg";
-				else ss << m_savepath << "\\others\\" << v_i << "_segment" << j << ".jpg";
+				stringstream ss2(stringstream::in | stringstream::out);
+				if(0 == j)
+				{
+					string sf = name.substr(0, 2);
+					for(i = 0; i < 31; ++i)
+					{
+						if(sf == str_idx_sf[i]) break;
+					}
+					ss << m_savepath << "\\charsChinese\\" << str_sf[i] << "\\" << str_sf[i] << "_" << v_i <<"_" << rawtime <<".jpg";
+					ss2 << m_savepath << "\\allchinese\\" << str_sf[i] << "_" << v_i <<"_" << rawtime <<".jpg";
+				}
+				else
+				{
+					ss << m_savepath << "\\chars2\\" << name[j + 1] << "\\" << name[j + 1] << "_" << v_i << "_" << j << "_" << rawtime <<".jpg";
+					ss2 << m_savepath << "\\allchars\\" << name[j + 1] << "_" << v_i << "_" << j << "_" << rawtime <<".jpg";
+				}
+				
 				imwrite(ss.str(), resultMat);
+				imwrite(ss2.str(), resultMat);			
 			}
 		}
 	}
+	
+	MessageBox("Finish.");
+}
+
+
+void CBATCHDlg::OnBnClickedButtonResize()
+{
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{			
+		string str = m_images[v_i].GetBuffer(0);
+
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+
+		vector<Mat> resultVec;
+		Mat src = imread(str, 0);
+						
+		Mat src_resize;
+		src_resize.create(20, 20, 16);
+
+		resize(src, src_resize, src_resize.size(), 0, 0, INTER_CUBIC);
+
+		stringstream ss(stringstream::in | stringstream::out);
+		ss << this->m_savepath << "\\" << name << ".jpg";
+		imwrite(ss.str(), src_resize);
+
+	}
+	MessageBox("Finish.");
+
+}
+
+
+void CBATCHDlg::OnBnClickedButtonPlaterecognize2()
+{
+	int i;
+	
+	CPlateRecognize pr;
+	pr.LoadANN("model/ann.xml");
+	pr.LoadSVM("model/svm.xml");
+
+	//pr.setGaussianBlurSize(5);
+	//pr.setMorphSizeWidth(17);
+
+	//pr.setVerifyMin(3);
+	//pr.setVerifyMax(20);
+
+	//pr.setLiuDingSize(7);
+	pr.setColorThreshold(150);
+
+	stringstream ss(stringstream::in | stringstream::out);
+	
+	int num_char = 0;
+	int num_plate = 0;
+	for(vector<CString>::size_type v_i = 0; v_i < m_images.size(); ++v_i)
+	{	
+		vector<string> plateVec;
+
+		ss << m_images[v_i] << " Result: ";
+
+		vector<Mat> resultVec;
+		string str = m_images[v_i].GetBuffer(0);
+
+		int index1 = str.find_last_of("\\");
+		int index2 = str.find_last_of(".");
+		string name = str.substr(index1 + 1,index2 - index1 - 1);
+
+		Mat src = imread(str, 1);
+		string str_cr;
+
+		int result = pr.plateRecognize2(src, plateVec);
+		int max_tmp;
+		int num_tmp;
+		if (result == 0)
+		{
+			num_tmp = 0;
+			max_tmp = 0;
+			for(i = 0; i < plateVec.size(); ++i) 
+			{ 
+				num_tmp = 0;
+				ss << " " << plateVec[i];
+				if(2 <= plateVec[i].size() && plateVec[i][0] == name[0]) ++num_tmp;
+				for(int j = 2; j < plateVec[i].size() && j <= 8; ++j)
+				{
+					if(plateVec[i][j] == name[j]) ++num_tmp;
+				}
+				if(num_tmp > max_tmp) max_tmp = num_tmp;
+			}
+			if(max_tmp == 7) ++num_plate;
+			num_char += max_tmp;
+			ss << "\r\n";
+		}
+		else
+		{
+			ss << "No Answer\r\n";
+		}
+	}
+
+	ss << "Char accuracy rate:" << (1.0 * num_char / (m_images.size() * 7)) << "\r\n";
+	ss << "Plate accuracy rate:" << (1.0 * num_plate / m_images.size()) << "\r\n";
+
+	m_res = ss.str().c_str();
+	UpdateData(FALSE);
+
+	CString filePath = this->m_savepath + "\\plate_recognize.txt";
+	std::ofstream resfile(filePath);
+	resfile << ss.str().c_str();
+	resfile.close();
 }
