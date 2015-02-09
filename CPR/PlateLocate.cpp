@@ -84,6 +84,7 @@ Mat CPlateLocate::showResultMat(Mat src, Size rect_size, Point2f center, int ind
 
 	return resultResized;
 }
+
 Mat CPlateLocate::showResultMat2(Mat src, Size rect_size, Point2f center, int index)
 {
 	Mat img_crop;
